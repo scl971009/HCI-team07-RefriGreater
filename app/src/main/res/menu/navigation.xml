@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_fridge"
+        android:icon="@drawable/iconfridge"
+        android:title="@string/toolbarfridge" />
+
+    <item
+        android:id="@+id/navigation_recipe"
+        android:icon="@drawable/iconrecipe"
+        android:title="@string/toolbarrecipe" />
+
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/iconsetting"
+        android:title="@string/toolbarsetting" />
+
+</menu>
