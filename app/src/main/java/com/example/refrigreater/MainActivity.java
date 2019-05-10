@@ -1,8 +1,10 @@
 package com.example.refrigreater;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,20 +17,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_toolbar);
 
-        TextView text_id = (TextView) findViewById(R.id.textid);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
 
         togglebutton.setChecked(false);
 
         Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
-        seefoodBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this  , SeeFood.class);
-                startActivity(intent);
-            }
-        });
+        seefoodBtn.setOnClickListener(seefoodbtnlistener);
     }
 
 
@@ -44,4 +40,37 @@ public class MainActivity extends Activity {
             text_id.setVisibility(View.GONE);
         }
     }
+
+    private Button.OnClickListener seefoodbtnlistener = new Button.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            setContentView(R.layout.activity_see_food);
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        }
+    };
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_fridge:
+                    setContentView(R.layout.activity_toolbar);
+                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                    Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
+                    seefoodBtn.setOnClickListener(seefoodbtnlistener);
+                    return true;
+                case R.id.navigation_recipe:
+                    setContentView(R.layout.activity_see_food);
+                    return true;
+                case R.id.navigation_setting:
+                    setContentView(R.layout.activity_see_food);
+                    return true;
+            }
+            return false;
+        }
+    };
 }

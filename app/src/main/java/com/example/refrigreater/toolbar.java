@@ -18,13 +18,11 @@ public class toolbar extends Activity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_fridge:
-                    mTextMessage.setText(R.string.toolbarfridge);
+                    setContentView(R.layout.activity_toolbar);
                     return true;
                 case R.id.navigation_recipe:
-                    mTextMessage.setText(R.string.toolbarrecipe);
                     return true;
                 case R.id.navigation_setting:
-                    mTextMessage.setText(R.string.toolbarsetting);
                     return true;
             }
             return false;
