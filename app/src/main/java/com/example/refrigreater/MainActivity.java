@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
 
 public class MainActivity extends Activity {
 
@@ -47,8 +49,31 @@ public class MainActivity extends Activity {
             setContentView(R.layout.activity_see_food);
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+            Button backBtn = (Button)findViewById(R.id.btnback);
+            backBtn.setOnClickListener(backwardbtnlistener);
         }
     };
+
+    private Button.OnClickListener backwardbtnlistener = new Button.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            setContentView(R.layout.activity_toolbar);
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+            Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
+            seefoodBtn.setOnClickListener(seefoodbtnlistener);
+            setCenterSpinner();
+        }
+    };
+
+    private void setCenterSpinner(){
+        Spinner spinner1 = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this, R.array.languages,R.layout.spinner_center_item);
+        adapter.setDropDownViewResource(R.layout.spinner_center_item);
+        spinner1.setAdapter(adapter);
+        //spinner1.setOnItemSelectedListener(new MyOnItemSelectedListener());
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

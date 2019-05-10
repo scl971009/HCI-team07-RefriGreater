@@ -14,12 +14,93 @@
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:background="?android:attr/windowBackground"
+        app:itemBackground="@color/toolbar"
+        app:itemIconTint="@android:color/black"
+        app:itemTextColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:itemBackground="@color/toolbar"
-        app:itemTextColor="@android:color/black"
-        app:itemIconTint="@android:color/black"
         app:menu="@menu/navigation" />
+
+    <TextView
+    android:layout_width="360px"
+    android:layout_height="120px"
+    android:layout_marginTop="95px"
+    android:layout_marginStart="360px"
+    android:text="@string/shokusai"
+    android:textSize="30sp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:layout_width="360px"
+        android:layout_height="120px"
+        android:layout_marginTop="300px"
+        android:layout_marginStart="111px"
+        android:text="@string/choosefridge"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/choosefridge"
+        />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="63px"
+        android:layout_marginTop="435px"
+        android:src="@drawable/search"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="105px"
+        android:layout_marginTop="372px"
+        android:src="@drawable/blueline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnmem"
+        android:layout_width="84.21px"
+        android:layout_height="72px"
+        android:layout_marginStart="936px"
+        android:layout_marginTop="125px"
+        android:background="@drawable/shareee"
+        android:gravity="center"
+        android:src="@drawable/shareee"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnback"
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:layout_marginStart="60px"
+        android:layout_marginTop="125px"
+        android:background="@drawable/backward"
+        android:gravity="center"
+        android:src="@drawable/backward"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="330px"
+        android:layout_height="63px"
+        android:layout_marginStart="260px"
+        android:layout_marginTop="297px"
+        android:textAlignment="center"
+        style="@style/SpinnerTheme"
+        android:entries="@array/languages"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>
