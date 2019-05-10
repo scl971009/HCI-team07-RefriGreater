@@ -13,7 +13,7 @@
 
             <item >
 
-                <bitmap android:gravity="end" android:src="@drawable/downarrow" />
+                <bitmap android:gravity="right" android:src="@drawable/downarrow" />
 
             </item>
 

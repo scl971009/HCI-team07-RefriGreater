@@ -51,6 +51,8 @@ public class MainActivity extends Activity {
             navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
             Button backBtn = (Button)findViewById(R.id.btnback);
             backBtn.setOnClickListener(backwardbtnlistener);
+            Spinner spinner = (Spinner) findViewById(R.id.spinner);
+            setCenterSpinner(spinner);
         }
     };
 
@@ -62,15 +64,13 @@ public class MainActivity extends Activity {
             navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
             Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
             seefoodBtn.setOnClickListener(seefoodbtnlistener);
-            setCenterSpinner();
         }
     };
 
-    private void setCenterSpinner(){
-        Spinner spinner1 = (Spinner) findViewById(R.id.spinner);
+    private void setCenterSpinner(Spinner spinner1){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.languages,R.layout.spinner_center_item);
-        adapter.setDropDownViewResource(R.layout.spinner_center_item);
+        adapter.setDropDownViewResource(R.layout.spinner_down);
         spinner1.setAdapter(adapter);
         //spinner1.setOnItemSelectedListener(new MyOnItemSelectedListener());
     }
