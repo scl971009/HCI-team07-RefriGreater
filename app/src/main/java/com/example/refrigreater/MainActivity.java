@@ -64,10 +64,16 @@ public class MainActivity extends Activity {
                     seefoodBtn.setOnClickListener(seefoodbtnlistener);
                     return true;
                 case R.id.navigation_recipe:
-                    setContentView(R.layout.activity_see_food);
+                    setContentView(R.layout.fridge);
+                    BottomNavigationView navigation1 = (BottomNavigationView) findViewById(R.id.navigation);
+                    navigation1.setSelectedItemId(R.id.navigation_recipe);
+                    navigation1.setOnNavigationItemSelectedListener(this);
                     return true;
                 case R.id.navigation_setting:
-                    setContentView(R.layout.activity_see_food);
+                    setContentView(R.layout.fridge);
+                    BottomNavigationView navigation2 = (BottomNavigationView) findViewById(R.id.navigation);
+                    navigation2.setSelectedItemId(R.id.navigation_setting);
+                    navigation2.setOnNavigationItemSelectedListener(this);
                     return true;
             }
             return false;

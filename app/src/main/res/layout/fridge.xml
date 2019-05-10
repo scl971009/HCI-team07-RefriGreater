@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mainfridge"
-    android:paddingLeft="0dp"
-    android:paddingTop="0dp"
-    android:paddingRight="0dp"
-    android:paddingBottom="0dp"
-    tools:context=".MainAcrivity">
+    android:layout_x="160dp"
+    tools:context=".SeeFood">
 
-    <Button
-        android:id="@+id/btnleft"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="129px"
-        android:layout_marginTop="1350px"
-        android:background="@drawable/mainbutton"
-        android:gravity="center"
-        android:src="@drawable/mainbutton"
-        android:text="@string/mainbuttonleft"
-        android:textColor="#fff" />
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:itemBackground="@drawable/navigation_selector"
+        app:itemTextColor="@android:color/black"
+        app:itemIconTint="@android:color/black"
+        app:menu="@menu/navigation" />
 
-    <Button
-        android:id="@+id/btnright"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="105px"
-        android:layout_marginTop="1350px"
-        android:background="@drawable/mainbutton"
-        android:gravity="center"
-        android:src="@drawable/mainbutton"
-        android:text="@string/mainbuttonright"
-        android:textColor="#fff" />
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
