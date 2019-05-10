@@ -5,7 +5,53 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/mainfridge"
     tools:context=".toolbar">
+
+    <Button
+        android:id="@+id/btnleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="129px"
+        android:layout_marginTop="1350px"
+        android:background="@drawable/mainbutton"
+        android:gravity="center"
+        android:src="@drawable/mainbutton"
+        android:text="@string/mainbuttonleft"
+        android:textColor="#fff"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="594px"
+        android:layout_marginTop="1350px"
+        android:background="@drawable/mainbutton"
+        android:gravity="center"
+        android:src="@drawable/mainbutton"
+        android:text="@string/mainbuttonright"
+        android:textColor="#fff"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnfridge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="129px"
+        android:layout_marginTop="750px"
+        android:background="@drawable/fridgebotton"
+        android:gravity="center"
+        android:src="@drawable/fridgebotton"
+        android:text="@string/fridge1"
+        android:textColor="@android:color/black"
+        android:textSize="40sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -17,6 +63,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:itemBackground="@color/toolbar"
         app:menu="@menu/navigation" />
+
+    <ToggleButton
+        android:id="@+id/toggle_button"
+        android:textOff=""
+        android:textOn=""
+        android:layout_width="90px"
+        android:layout_height="54px"
+        android:layout_marginStart="870px"
+        android:layout_marginTop="393px"
+        android:background="@drawable/toggle_selector"
+        android:onClick="onTargetClick"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textid"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="123dp"
+        android:layout_marginTop="313dp"
+        android:text="@string/id1"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
