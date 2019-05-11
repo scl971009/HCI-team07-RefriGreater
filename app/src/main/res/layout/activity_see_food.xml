@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_x="160dp"
-    tools:context=".SeeFood">
+    tools:context=".SeeFood"
+    android:id="@+id/container">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -23,6 +23,7 @@
         app:menu="@menu/navigation" />
 
     <TextView
+        android:id="@+id/shokusai"
     android:layout_width="360px"
     android:layout_height="120px"
     android:layout_marginTop="95px"
@@ -33,6 +34,7 @@
     app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
+        android:id="@+id/choosefridge"
         android:layout_width="360px"
         android:layout_height="120px"
         android:layout_marginTop="300px"
@@ -101,6 +103,5 @@
         android:entries="@array/languages"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </android.support.constraint.ConstraintLayout>
