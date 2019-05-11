@@ -34,7 +34,6 @@ public class MainActivity extends Activity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
-
         togglebutton.setChecked(false);
 
         Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
@@ -44,6 +43,10 @@ public class MainActivity extends Activity {
         list.add("家", "玉米", 73, "預設", 5, false, "");
         list.add("家", "起司", 200, "預設", 1000, true, "");
         list.add("家", "頂級蒲燒鰻", 1, "預設", 0, true, "");
+        list.addcategory("編輯預設");
+        list.addcategory("刪除");
+        list.addcategory("新增");
+        list.addcategory("預設");
     }
 
 
@@ -56,7 +59,7 @@ public class MainActivity extends Activity {
             setContentView(R.layout.activity_toolbar);
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-            Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
+            Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
             seefoodBtn.setOnClickListener(seefoodbtnlistener);
             return true;
         }
@@ -84,6 +87,8 @@ public class MainActivity extends Activity {
             navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
             Button backBtn = (Button)findViewById(R.id.btnback);
             backBtn.setOnClickListener(backwardbtnlistener);
+            Button plusBtn = (Button)findViewById(R.id.btnplus);
+            plusBtn.setOnClickListener(plusfoodbtnlistener);
             Spinner spinner = (Spinner) findViewById(R.id.spinner);
             setCenterSpinner(spinner);
             generateBtnList();
@@ -111,12 +116,12 @@ public class MainActivity extends Activity {
         int count = 0;
         for(int index = 0; index < btnContentList.foodlist.size(); index++){
             Button codeBtn = new Button( this );
-            setBtnAttribute( codeBtn,  btnContentList.foodlist.get(index), count );
+            setBtnAttribute( codeBtn,  btnContentList.foodlist.get(index), count , index);
             count++;
         }
     }
 
-    private void setBtnAttribute( Button codeBtn, Foodlist.Food btnContentList, int index ){
+    private void setBtnAttribute( Button codeBtn, Foodlist.Food btnContentList, int index , int hash){
         codeBtn.setId(View.generateViewId());
         if(btnContentList.expire<3){
             codeBtn.setBackground(getResources().getDrawable(R.drawable.backred, null));
@@ -197,7 +202,7 @@ public class MainActivity extends Activity {
         codeBtn.setText(text);
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/RobotoMono-Regular.ttf");
         codeBtn.setTypeface(font);
-        codeBtn.setTag(btnContentList.name);
+        codeBtn.setTag(hash);
         codeBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
         codeBtn.setGravity(Gravity.RIGHT|Gravity.CENTER_VERTICAL);
         codeBtn.setPadding(36, 0, 75, 0);
@@ -240,6 +245,42 @@ public class MainActivity extends Activity {
             seefoodBtn.setOnClickListener(seefoodbtnlistener);
         }
     };
+
+    private Button.OnClickListener plusfoodbtnlistener = new Button.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            setContentView(R.layout.plus_food);
+            Spinner spinner = (Spinner) findViewById(R.id.spinnerfridge);
+            addsetCenterSpinner(spinner);
+            int quant = 0;
+            TextView txtValue = (TextView) findViewById(R.id.quantity);
+            txtValue.setText(Integer.toString(quant));
+            Spinner spinner2 = (Spinner) findViewById(R.id.spinnercategory);
+            addsetCenterSpinner2(spinner2);
+            ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
+            togglebutton.setChecked(false);
+        }
+    };
+
+    private void addsetCenterSpinner2(Spinner spinner1){
+        Foodlist list = (Foodlist)getApplicationContext();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,R.layout.spinnerforadd);
+        adapter.setDropDownViewResource(R.layout.spinner_down);
+        for(int i = 0; i < list.categorylist.size(); i++) {
+            adapter.add(list.categorylist.get(i));
+        }
+        spinner1.setAdapter(adapter);
+        //spinner1.setOnItemSelectedListener(new MyOnItemSelectedListener());
+    }
+
+    private void addsetCenterSpinner(Spinner spinner1){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this, R.array.languages,R.layout.spinnerforadd);
+        adapter.setDropDownViewResource(R.layout.spinner_down);
+        spinner1.setAdapter(adapter);
+        //spinner1.setOnItemSelectedListener(new MyOnItemSelectedListener());
+    }
 
     private void setCenterSpinner(Spinner spinner1){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(

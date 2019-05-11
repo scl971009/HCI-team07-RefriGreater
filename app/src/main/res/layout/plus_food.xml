@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/addfood">
+
+    <Spinner
+        android:id="@+id/spinnerfridge"
+        android:layout_width="450px"
+        android:layout_height="81px"
+        android:layout_marginStart="280px"
+        android:layout_marginTop="240px"
+        android:textAlignment="center"
+        style="@style/addSpinnerTheme"
+        android:entries="@array/languages"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/username"
+        android:inputType="text"
+        android:layout_width="300px"
+        android:layout_height="150px"
+        android:layout_marginTop="40px"
+        android:layout_marginLeft="355px"
+        android:textSize="20sp"
+        android:hint="@string/foodnamd"
+        android:background="@null"
+        android:textCursorDrawable="@drawable/color_cursor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="168px"
+            android:layout_height="78px"
+            android:layout_marginTop="35px"
+            android:layout_marginStart="350px"
+            android:textSize="20sp"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
+            android:id="@+id/btnminus"
+            android:layout_width="72px"
+            android:layout_height="72px"
+            android:layout_marginStart="50px"
+            android:layout_marginTop="25px"
+            android:background="@drawable/minus"
+            android:gravity="center"
+            android:src="@drawable/minus"
+            android:text=""
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnplus"
+            android:layout_width="72px"
+            android:layout_height="72px"
+            android:layout_marginStart="0px"
+            android:layout_marginTop="25px"
+            android:background="@drawable/plus"
+            android:gravity="center"
+            android:src="@drawable/plus"
+            android:text=""
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <Spinner
+        android:id="@+id/spinnercategory"
+        android:layout_width="450px"
+        android:layout_height="81px"
+        android:layout_marginStart="277px"
+        android:layout_marginTop="68px"
+        android:textAlignment="center"
+        style="@style/addSpinnerTheme"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="168px"
+            android:layout_height="78px"
+            android:layout_marginStart="350px"
+            android:layout_marginTop="35px"
+            android:gravity="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btncalender"
+            android:layout_width="54px"
+            android:layout_height="54px"
+            android:layout_marginTop="70px"
+            android:layout_marginStart="140px"
+            android:background="@drawable/calender"
+            android:gravity="center"
+            android:src="@drawable/calender"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <ToggleButton
+        android:id="@+id/toggle_button"
+        android:textOff=""
+        android:textOn=""
+        android:layout_width="90px"
+        android:layout_height="54px"
+        android:layout_marginStart="328px"
+        android:layout_marginTop="88px"
+        android:background="@drawable/addtoggle_selector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/username"
+        android:inputType="text"
+        android:layout_width="300px"
+        android:layout_height="150px"
+        android:layout_marginTop="45px"
+        android:layout_marginLeft="355px"
+        android:textSize="20sp"
+        android:background="@null"
+        android:textCursorDrawable="@drawable/color_cursor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</LinearLayout>

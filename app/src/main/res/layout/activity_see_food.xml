@@ -80,6 +80,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/btnplus"
+        android:layout_width="108px"
+        android:layout_height="108px"
+        android:layout_marginStart="873px"
+        android:layout_marginTop="1370px"
+        android:background="@drawable/plusfood"
+        android:gravity="center"
+        android:src="@drawable/plusfood"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/btnback"
         android:layout_width="72px"
         android:layout_height="72px"

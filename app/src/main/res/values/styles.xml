@@ -10,6 +10,9 @@
     <style name="SpinnerTheme" parent="android:Widget.Spinner">
         <item name="android:background">@drawable/bg_spinner</item>
     </style>
+    <style name="addSpinnerTheme" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/addbg_spinner</item>
+    </style>
     <style name="MONO">
         @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
     </style>

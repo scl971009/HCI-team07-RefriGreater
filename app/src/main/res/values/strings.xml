@@ -10,4 +10,5 @@
     <string name="id1">ID: 1234567</string>
     <string name="shokusai">食材記錄</string>
     <string name="choosefridge">選擇冰箱</string>
+    <string name="foodnamd">最多五個字</string>
 </resources>
