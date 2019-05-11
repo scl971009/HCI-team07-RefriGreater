@@ -131,7 +131,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/ps"
         android:inputType="text"
         android:layout_width="300px"
         android:layout_height="150px"
