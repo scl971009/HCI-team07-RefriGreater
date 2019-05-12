@@ -8,14 +8,23 @@ public class Foodlist extends Application {
 
     public ArrayList<Food> foodlist = new ArrayList<>();
 
-    public ArrayList<String> categorylist = new ArrayList<>();
+    public ArrayList<Category> categorylist = new ArrayList<>();
 
-    public void addcategory(String category){
-        categorylist.add(0, category);
+    public void addcategory(String category, int order){
+        categorylist.add(new Category(category, order));
     }
 
     public void add(String fridge, String name, int quantity, String category, int expire, boolean pri0pub1, String ps){
         foodlist.add(new Food(fridge, name, quantity, category, expire, pri0pub1, ps));
+    }
+
+    public class Category{
+        public String category;
+        public int order;
+        public Category(String category, int order){
+            this.category = category;
+            this.order = order;
+        }
     }
 
     public class Food {

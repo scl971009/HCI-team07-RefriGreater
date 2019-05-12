@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="690px"
+    android:layout_height="495px"
+    android:background="@drawable/addcategory">
+
+    <EditText
+        android:id="@+id/newcatogary"
+        android:layout_width="240px"
+        android:layout_height="150px"
+        android:layout_marginTop="110px"
+        android:layout_marginLeft="165px"
+        android:textSize="20sp"
+        android:background="@null"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:inputType="text"
+        />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btncancel"
+            android:layout_width="240px"
+            android:layout_height="96px"
+            android:layout_marginTop="0px"
+            android:layout_marginStart="35px"
+            android:background="@drawable/cancel"
+            android:gravity="center"
+            android:src="@drawable/cancel"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnnew"
+            android:layout_width="240px"
+            android:layout_height="96px"
+            android:layout_marginTop="0px"
+            android:layout_marginStart="35px"
+            android:background="@drawable/add"
+            android:gravity="center"
+            android:src="@drawable/add"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</LinearLayout>

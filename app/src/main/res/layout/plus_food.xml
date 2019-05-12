@@ -38,12 +38,25 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btnminus"
+            android:layout_width="72px"
+            android:layout_height="72px"
+            android:layout_marginStart="310px"
+            android:layout_marginTop="10px"
+            android:background="@drawable/minus"
+            android:gravity="center"
+            android:src="@drawable/minus"
+            android:text=""
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <EditText
             android:id="@+id/quantity"
             android:layout_width="168px"
             android:layout_height="150px"
             android:layout_marginTop="10px"
-            android:layout_marginStart="370px"
+            android:layout_marginStart="80px"
             android:textSize="20sp"
             android:gravity="center"
             android:background="@null"
@@ -53,23 +66,10 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
-            android:id="@+id/btnminus"
-            android:layout_width="72px"
-            android:layout_height="72px"
-            android:layout_marginStart="80px"
-            android:layout_marginTop="10px"
-            android:background="@drawable/minus"
-            android:gravity="center"
-            android:src="@drawable/minus"
-            android:text=""
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
             android:id="@+id/btnplus"
             android:layout_width="72px"
             android:layout_height="72px"
-            android:layout_marginStart="0px"
+            android:layout_marginStart="80px"
             android:layout_marginTop="10px"
             android:background="@drawable/plus"
             android:gravity="center"

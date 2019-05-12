@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.graphics.Typeface;
+import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -26,8 +29,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 public class MainActivity extends Activity {
 
@@ -51,10 +56,10 @@ public class MainActivity extends Activity {
         list.add("家", "玉米", 73, "預設", 5, false, "");
         list.add("家", "起司", 200, "預設", 1000, true, "");
         list.add("家", "頂級蒲燒鰻", 1, "預設", 0, true, "");
-        list.addcategory("更改預設");
-        list.addcategory("刪除類別");
-        list.addcategory("新增類別");
-        list.addcategory("預設");
+        list.addcategory("預設", 1);
+        list.addcategory("更改預設", -1);
+        list.addcategory("新增類別", -1);
+        list.addcategory("刪除類別", -1);
     }
 
 
@@ -308,6 +313,121 @@ public class MainActivity extends Activity {
             dialog.setView(view);
             final AlertDialog log = dialog.create();
 
+            spinner2.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView parent, View v, int position, long id) {
+                    if(parent.getSelectedItem().toString().matches("新增類別")){
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                        final View view = getLayoutInflater().inflate(R.layout.addcategory, null);
+                        dialog.setView(view);
+                        final AlertDialog loginside = dialog.create();
+
+                        Button cancelbtn = (Button) view.findViewById((R.id.btncancel));
+                        Button confirmbtn = (Button) view.findViewById(R.id.btnnew);
+
+                        cancelbtn.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loginside.dismiss();
+                            }
+                        });
+
+                        confirmbtn.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                EditText entered = (EditText)view.findViewById(R.id.newcatogary);
+                                Foodlist list = (Foodlist)getApplicationContext();
+                                Foodlist added = new Foodlist();
+                                added.addcategory(entered.getText().toString(), 0);
+                                added.addcategory(entered.getText().toString(), 1);
+                                if(list.categorylist.contains(added.categorylist.get(0))||list.categorylist.contains(added.categorylist.get(1))){
+                                    Toast toast = Toast.makeText(MainActivity.this, "此類別已存在", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                                else if(entered.getText().toString().matches("")){
+                                    Toast toast = Toast.makeText(MainActivity.this, "請輸入類別", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                                else{
+                                    list.addcategory(entered.getText().toString(), 0);
+                                    loginside.dismiss();
+                                    log.dismiss();
+                                    setContentView(R.layout.activity_see_food);
+                                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                                    Button backBtn = (Button) findViewById(R.id.btnback);
+                                    backBtn.setOnClickListener(backwardbtnlistener);
+                                    Button plusBtn = (Button) findViewById(R.id.btnplus);
+                                    plusBtn.setOnClickListener(plusfoodbtnlistener);
+                                    Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                                    setCenterSpinner(spinner);
+                                    generateBtnList();
+                                }
+                            }
+                        });
+
+                        loginside.show();
+                        WindowManager.LayoutParams params = loginside.getWindow().getAttributes();
+                        params.width = 690;
+                        params.height = 495;
+                        loginside.getWindow().setAttributes(params);
+                    }
+                    else if(parent.getSelectedItem().toString().matches("刪除類別")){
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                        final View view = getLayoutInflater().inflate(R.layout.deletecategory, null);
+                        dialog.setView(view);
+                        final AlertDialog loginside = dialog.create();
+
+                        Button cancelbtn = (Button) view.findViewById((R.id.btncancel));
+                        Button confirmbtn = (Button) view.findViewById(R.id.btndelete);
+
+                        Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnerdelete);
+                        addsetCenterSpinner(spinner2);
+
+                        cancelbtn.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loginside.dismiss();
+                            }
+                        });
+
+                        confirmbtn.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Foodlist list = (Foodlist)getApplicationContext();
+                                Spinner entered = (Spinner)view.findViewById(R.id.spinnerdelete);
+                                Foodlist tobedelete = new Foodlist();
+                                tobedelete.addcategory(entered.getSelectedItem().toString(), 0);
+                                list.categorylist.remove(tobedelete.categorylist.get(0));
+                                loginside.dismiss();
+                                log.dismiss();
+                                setContentView(R.layout.activity_see_food);
+                                BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                                Button backBtn = (Button) findViewById(R.id.btnback);
+                                backBtn.setOnClickListener(backwardbtnlistener);
+                                Button plusBtn = (Button) findViewById(R.id.btnplus);
+                                plusBtn.setOnClickListener(plusfoodbtnlistener);
+                                Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                                setCenterSpinner(spinner);
+                                generateBtnList();
+                            }
+                        });
+
+                        loginside.show();
+                        WindowManager.LayoutParams params = loginside.getWindow().getAttributes();
+                        params.width = 690;
+                        params.height = 495;
+                        loginside.getWindow().setAttributes(params);
+                    }
+                    else if(parent.getSelectedItem().toString().matches("更改預設")){
+                        Toast toast = Toast.makeText(MainActivity.this, "更改", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+                public void onNothingSelected(AdapterView parent) {
+                }
+            });
+
             cancelbtn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -319,19 +439,45 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     EditText editText = (EditText) view.findViewById(R.id.username);
+                    Spinner spinnerc = (Spinner) view.findViewById(R.id.spinnercategory);
                     if(editText.getText().toString().matches("")){
                         Toast toast = Toast.makeText(MainActivity.this, "請輸入品項", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else if(editText.getText().toString().length()>5){
+                        Toast toast = Toast.makeText(MainActivity.this, "品項名稱太長了", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else if(spinnerc.getSelectedItem().toString().matches("新增類別")||spinnerc.getSelectedItem().toString().matches("刪除類別")||spinnerc.getSelectedItem().toString().matches("更改預設")){
+                        Toast toast = Toast.makeText(MainActivity.this, "請選擇類別", Toast.LENGTH_LONG);
                         toast.show();
                     }
                     else{
                         Foodlist list = (Foodlist)getApplicationContext();
                         Spinner spinnerf = (Spinner) view.findViewById(R.id.spinnerfridge);
                         EditText quan = (EditText)view.findViewById(R.id.quantity);
-                        Spinner spinnerc = (Spinner) view.findViewById(R.id.spinnercategory);
                         ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggle_button);
                         EditText ps = (EditText)view.findViewById(R.id.ps);
+                        TextView date = (TextView)view.findViewById(R.id.date);
+                        String line = (String) date.getText();
+                        DateFormat df = new SimpleDateFormat("yyyy/M/dd");
+                        Calendar c = Calendar.getInstance();
+                        int ny = c.get(Calendar.YEAR);
+                        int nm = c.get(Calendar.MONTH);
+                        int nd = c.get(Calendar.DAY_OF_MONTH);
+                        String now = String.format("%d/%d/%d", ny, (nm+1), nd);
+                        long days = 0;
+                        try {
+                            Date d1 = df.parse(line);
+                            Date d2 = df.parse(now);
+                            long diff = d1.getTime() - d2.getTime();
+                            days = diff / (1000 * 60 * 60 * 24);
+                        }
+                        catch(ParseException e){
+                            e.printStackTrace();
+                        }
                         list.add(spinnerf.getSelectedItem().toString(), editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
-                                spinnerc.getSelectedItem().toString(), 0, toggle.isChecked(), ps.getText().toString());
+                                spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString());
                         log.dismiss();
                         setContentView(R.layout.activity_see_food);
                         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -351,26 +497,40 @@ public class MainActivity extends Activity {
         }
     };
 
-
+    class Sortbyorder implements Comparator<Foodlist.Category> {
+        // Used for sorting in ascending order of
+        // roll number
+        public int compare(Foodlist.Category a, Foodlist.Category b) {
+            return b.order - a.order;
+        }
+    }
 
     private void addsetCenterSpinner2(Spinner spinner1){
         Foodlist list = (Foodlist)getApplicationContext();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 MainActivity.this,R.layout.spinnerforadd);
         adapter.setDropDownViewResource(R.layout.spinner_down);
+        //Sort
+        Collections.sort(list.categorylist, new Sortbyorder());
         for(int i = 0; i < list.categorylist.size(); i++) {
-            adapter.add(list.categorylist.get(i));
+            adapter.add(list.categorylist.get(i).category);
         }
         spinner1.setAdapter(adapter);
-        //spinner1.setOnItemSelectedListener(new MyOnItemSelectedListener());
     }
 
     private void addsetCenterSpinner(Spinner spinner1){
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.languages,R.layout.spinnerforadd);
+        Foodlist list = (Foodlist)getApplicationContext();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                MainActivity.this,R.layout.spinnerforadd);
         adapter.setDropDownViewResource(R.layout.spinner_down);
+        //Sort
+        Collections.sort(list.categorylist, new Sortbyorder());
+        for(int i = 0; i < list.categorylist.size(); i++) {
+            if(list.categorylist.get(i).order == 0) {
+                adapter.add(list.categorylist.get(i).category);
+            }
+        }
         spinner1.setAdapter(adapter);
-        //spinner1.setOnItemSelectedListener(new MyOnItemSelectedListener());
     }
 
     private void setCenterSpinner(Spinner spinner1){
