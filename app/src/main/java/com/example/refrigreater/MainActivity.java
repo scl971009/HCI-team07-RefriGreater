@@ -2,6 +2,7 @@ package com.example.refrigreater;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.graphics.Typeface;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
@@ -18,9 +19,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.Collections;
@@ -74,7 +77,7 @@ public class MainActivity extends Activity {
     public void onTargetClick(View view) {
         TextView text_id = (TextView) findViewById(R.id.textid);
         ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
-        ToggleButton toggleButton = (ToggleButton) view;
+        //ToggleButton toggleButton = (ToggleButton) view;
         if (togglebutton.isChecked()) {
             text_id.setVisibility(View.VISIBLE);
         } else {
@@ -249,7 +252,7 @@ public class MainActivity extends Activity {
             txtValue.setText(String.format("%d", quant));
             TextView date = (TextView) view.findViewById(R.id.date);
             Calendar mCal = Calendar.getInstance();
-            String dateformat = "M/dd";
+            String dateformat = "yyyy/M/dd";
             SimpleDateFormat df = new SimpleDateFormat(dateformat);
             String today = df.format(mCal.getTime());
             date.setText(today);
@@ -279,8 +282,71 @@ public class MainActivity extends Activity {
                 }
             });
 
+            //calendar
+            Button canlendarbtn = (Button)view.findViewById(R.id.btncalendar);
+            canlendarbtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Calendar c = Calendar.getInstance();
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    int month = c.get(Calendar.MONTH);
+                    int year = c.get(Calendar.YEAR);
+                    DatePickerDialog dpd = new DatePickerDialog(MainActivity.this, R.style.AppTheme_DialogTheme, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker vi, int year, int month, int dayOfMonth) {
+                            TextView txt = (TextView)view.findViewById(R.id.date);
+                            txt.setText(String.format("%d/%d/%d",year,  month+1, dayOfMonth));
+                        }
+                    }, year, month, day);
+                    dpd.show();
+                }
+            });
+
+            Button cancelbtn = (Button) view.findViewById((R.id.btncancel));
+            Button confirmbtn = (Button) view.findViewById(R.id.btnconfirm);
+
             dialog.setView(view);
-            AlertDialog log = dialog.create();
+            final AlertDialog log = dialog.create();
+
+            cancelbtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    log.dismiss();
+                }
+            });
+
+            confirmbtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText editText = (EditText) view.findViewById(R.id.username);
+                    if(editText.getText().toString().matches("")){
+                        Toast toast = Toast.makeText(MainActivity.this, "請輸入品項", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else{
+                        Foodlist list = (Foodlist)getApplicationContext();
+                        Spinner spinnerf = (Spinner) view.findViewById(R.id.spinnerfridge);
+                        EditText quan = (EditText)view.findViewById(R.id.quantity);
+                        Spinner spinnerc = (Spinner) view.findViewById(R.id.spinnercategory);
+                        ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggle_button);
+                        EditText ps = (EditText)view.findViewById(R.id.ps);
+                        list.add(spinnerf.getSelectedItem().toString(), editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
+                                spinnerc.getSelectedItem().toString(), 0, toggle.isChecked(), ps.getText().toString());
+                        log.dismiss();
+                        setContentView(R.layout.activity_see_food);
+                        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                        Button backBtn = (Button) findViewById(R.id.btnback);
+                        backBtn.setOnClickListener(backwardbtnlistener);
+                        Button plusBtn = (Button) findViewById(R.id.btnplus);
+                        plusBtn.setOnClickListener(plusfoodbtnlistener);
+                        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                        setCenterSpinner(spinner);
+                        generateBtnList();
+                    }
+                }
+            });
+
             log.show();
         }
     };

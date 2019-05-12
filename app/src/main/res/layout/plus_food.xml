@@ -98,9 +98,9 @@
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="168px"
+            android:layout_width="300px"
             android:layout_height="78px"
-            android:layout_marginStart="450px"
+            android:layout_marginStart="400px"
             android:layout_marginTop="80px"
             android:gravity="center"
             android:textSize="20sp"
@@ -108,11 +108,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btncalender"
+            android:id="@+id/btncalendar"
             android:layout_width="54px"
             android:layout_height="54px"
             android:layout_marginTop="80px"
-            android:layout_marginStart="90px"
+            android:layout_marginStart="30px"
             android:background="@drawable/calender"
             android:gravity="center"
             android:src="@drawable/calender"
