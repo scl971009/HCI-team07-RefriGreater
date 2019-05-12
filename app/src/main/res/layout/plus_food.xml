@@ -10,9 +10,10 @@
         android:id="@+id/spinnerfridge"
         android:layout_width="450px"
         android:layout_height="81px"
-        android:layout_marginStart="280px"
-        android:layout_marginTop="240px"
+        android:layout_marginStart="300px"
+        android:layout_marginTop="250px"
         android:textAlignment="center"
+        android:textSize="20sp"
         style="@style/addSpinnerTheme"
         android:entries="@array/languages"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,8 +24,8 @@
         android:inputType="text"
         android:layout_width="300px"
         android:layout_height="150px"
-        android:layout_marginTop="40px"
-        android:layout_marginLeft="355px"
+        android:layout_marginTop="50px"
+        android:layout_marginLeft="375px"
         android:textSize="20sp"
         android:hint="@string/foodnamd"
         android:background="@null"
@@ -37,14 +38,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <EditText
             android:id="@+id/quantity"
             android:layout_width="168px"
-            android:layout_height="78px"
-            android:layout_marginTop="35px"
-            android:layout_marginStart="350px"
+            android:layout_height="150px"
+            android:layout_marginTop="10px"
+            android:layout_marginStart="370px"
             android:textSize="20sp"
             android:gravity="center"
+            android:background="@null"
+            android:inputType="number"
+            android:textCursorDrawable="@drawable/color_cursor"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -52,8 +56,8 @@
             android:id="@+id/btnminus"
             android:layout_width="72px"
             android:layout_height="72px"
-            android:layout_marginStart="50px"
-            android:layout_marginTop="25px"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="10px"
             android:background="@drawable/minus"
             android:gravity="center"
             android:src="@drawable/minus"
@@ -66,7 +70,7 @@
             android:layout_width="72px"
             android:layout_height="72px"
             android:layout_marginStart="0px"
-            android:layout_marginTop="25px"
+            android:layout_marginTop="10px"
             android:background="@drawable/plus"
             android:gravity="center"
             android:src="@drawable/plus"
@@ -80,8 +84,8 @@
         android:id="@+id/spinnercategory"
         android:layout_width="450px"
         android:layout_height="81px"
-        android:layout_marginStart="277px"
-        android:layout_marginTop="68px"
+        android:layout_marginStart="300px"
+        android:layout_marginTop="45px"
         android:textAlignment="center"
         style="@style/addSpinnerTheme"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,15 +93,15 @@
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="150px"
+        android:layout_height="160px"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/date"
             android:layout_width="168px"
             android:layout_height="78px"
-            android:layout_marginStart="350px"
-            android:layout_marginTop="35px"
+            android:layout_marginStart="450px"
+            android:layout_marginTop="80px"
             android:gravity="center"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,8 +111,8 @@
             android:id="@+id/btncalender"
             android:layout_width="54px"
             android:layout_height="54px"
-            android:layout_marginTop="70px"
-            android:layout_marginStart="140px"
+            android:layout_marginTop="80px"
+            android:layout_marginStart="90px"
             android:background="@drawable/calender"
             android:gravity="center"
             android:src="@drawable/calender"
@@ -124,8 +128,8 @@
         android:textOn=""
         android:layout_width="90px"
         android:layout_height="54px"
-        android:layout_marginStart="328px"
-        android:layout_marginTop="88px"
+        android:layout_marginStart="330px"
+        android:layout_marginTop="100px"
         android:background="@drawable/addtoggle_selector"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -135,12 +139,45 @@
         android:inputType="text"
         android:layout_width="300px"
         android:layout_height="150px"
-        android:layout_marginTop="45px"
-        android:layout_marginLeft="355px"
+        android:layout_marginTop="60px"
+        android:layout_marginLeft="375px"
         android:textSize="20sp"
         android:background="@null"
         android:textCursorDrawable="@drawable/color_cursor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="200px"
+        android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/btncancel"
+        android:layout_width="240px"
+        android:layout_height="96px"
+        android:layout_marginTop="70px"
+        android:layout_marginStart="110px"
+        android:background="@drawable/cancel"
+        android:gravity="center"
+        android:src="@drawable/cancel"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnconfirm"
+            android:layout_width="240px"
+            android:layout_height="96px"
+            android:layout_marginTop="70px"
+            android:layout_marginStart="240px"
+            android:background="@drawable/confirm"
+            android:gravity="center"
+            android:src="@drawable/confirm"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
 
 </LinearLayout>

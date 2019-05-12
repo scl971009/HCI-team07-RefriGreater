@@ -11,4 +11,6 @@
     <string name="shokusai">食材記錄</string>
     <string name="choosefridge">選擇冰箱</string>
     <string name="foodnamd">最多五個字</string>
+    <string name="confirm">確認</string>
+    <string name="cancel">取消</string>
 </resources>

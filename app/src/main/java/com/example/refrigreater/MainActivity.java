@@ -1,7 +1,10 @@
 package com.example.refrigreater;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.Typeface;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -12,8 +15,10 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -36,24 +41,23 @@ public class MainActivity extends Activity {
         ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
         togglebutton.setChecked(false);
 
-        Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
+        Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
         seefoodBtn.setOnClickListener(seefoodbtnlistener);
 
-        Foodlist list = (Foodlist)getApplicationContext();
+        Foodlist list = (Foodlist) getApplicationContext();
         list.add("家", "玉米", 73, "預設", 5, false, "");
         list.add("家", "起司", 200, "預設", 1000, true, "");
         list.add("家", "頂級蒲燒鰻", 1, "預設", 0, true, "");
-        list.addcategory("編輯預設");
-        list.addcategory("刪除");
-        list.addcategory("新增");
+        list.addcategory("更改預設");
+        list.addcategory("刪除類別");
+        list.addcategory("新增類別");
         list.addcategory("預設");
     }
 
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             // Show home screen when pressing “back” button,
             //  so that this app won’t be closed accidentally
             setContentView(R.layout.activity_toolbar);
@@ -67,27 +71,26 @@ public class MainActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public void onTargetClick(View view){
+    public void onTargetClick(View view) {
         TextView text_id = (TextView) findViewById(R.id.textid);
         ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
         ToggleButton toggleButton = (ToggleButton) view;
-        if(togglebutton.isChecked()){
+        if (togglebutton.isChecked()) {
             text_id.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             text_id.setVisibility(View.GONE);
         }
     }
 
-    private Button.OnClickListener seefoodbtnlistener = new Button.OnClickListener(){
+    private Button.OnClickListener seefoodbtnlistener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
             setContentView(R.layout.activity_see_food);
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-            Button backBtn = (Button)findViewById(R.id.btnback);
+            Button backBtn = (Button) findViewById(R.id.btnback);
             backBtn.setOnClickListener(backwardbtnlistener);
-            Button plusBtn = (Button)findViewById(R.id.btnplus);
+            Button plusBtn = (Button) findViewById(R.id.btnplus);
             plusBtn.setOnClickListener(plusfoodbtnlistener);
             Spinner spinner = (Spinner) findViewById(R.id.spinner);
             setCenterSpinner(spinner);
@@ -95,107 +98,89 @@ public class MainActivity extends Activity {
         }
     };
 
-    class Sortbyexpire implements Comparator<Foodlist.Food>
-    {
+    class Sortbyexpire implements Comparator<Foodlist.Food> {
         // Used for sorting in ascending order of
         // roll number
-        public int compare(Foodlist.Food a, Foodlist.Food b)
-        {
+        public int compare(Foodlist.Food a, Foodlist.Food b) {
             return a.expire - b.expire;
         }
     }
 
-    private void generateBtnList(){
-        Foodlist btnContentList = (Foodlist)getApplicationContext();
+    private void generateBtnList() {
+        Foodlist btnContentList = (Foodlist) getApplicationContext();
 
-        if( null == btnContentList ){
+        if (null == btnContentList) {
             return;
         }
 
         Collections.sort(btnContentList.foodlist, new Sortbyexpire());
         int count = 0;
-        for(int index = 0; index < btnContentList.foodlist.size(); index++){
-            Button codeBtn = new Button( this );
-            setBtnAttribute( codeBtn,  btnContentList.foodlist.get(index), count , index);
+        for (int index = 0; index < btnContentList.foodlist.size(); index++) {
+            Button codeBtn = new Button(this);
+            setBtnAttribute(codeBtn, btnContentList.foodlist.get(index), count, index);
             count++;
         }
     }
 
-    private void setBtnAttribute( Button codeBtn, Foodlist.Food btnContentList, int index , int hash){
+    private void setBtnAttribute(Button codeBtn, Foodlist.Food btnContentList, int index, int hash) {
         codeBtn.setId(View.generateViewId());
-        if(btnContentList.expire<3){
+        if (btnContentList.expire < 3) {
             codeBtn.setBackground(getResources().getDrawable(R.drawable.backred, null));
-        }
-        else if(btnContentList.expire>5){
+        } else if (btnContentList.expire > 5) {
             codeBtn.setBackground(getResources().getDrawable(R.drawable.backgreen, null));
-        }
-        else {
+        } else {
             codeBtn.setBackground(getResources().getDrawable(R.drawable.backyellow, null));
         }
         String text = btnContentList.name;
-        for(int i = 0; i < 5 - btnContentList.name.length(); i++){
+        for (int i = 0; i < 5 - btnContentList.name.length(); i++) {
             text += "　";
         }
         //text += String.format("%4d\t%6d\t%s", btnContentList.quantity, btnContentList.expire, "天");
-        if(btnContentList.quantity>999) {
+        if (btnContentList.quantity > 999) {
             text += btnContentList.quantity;
-        }
-        else if(btnContentList.quantity>99){
+        } else if (btnContentList.quantity > 99) {
             text += " ";
             text += btnContentList.quantity;
-        }
-        else if(btnContentList.quantity>9){
+        } else if (btnContentList.quantity > 9) {
             text += "  ";
             text += btnContentList.quantity;
-        }
-        else if(btnContentList.quantity>-1){
+        } else if (btnContentList.quantity > -1) {
             text += "   ";
             text += btnContentList.quantity;
-        }
-        else if(btnContentList.quantity>-10){
+        } else if (btnContentList.quantity > -10) {
             text += "  ";
             text += btnContentList.quantity;
-        }
-        else if(btnContentList.quantity>-100){
+        } else if (btnContentList.quantity > -100) {
             text += " ";
             text += btnContentList.quantity;
-        }
-        else{
+        } else {
             text += btnContentList.quantity;
         }
         //text+="　";
-        if(btnContentList.expire>9999) {
+        if (btnContentList.expire > 9999) {
             text += btnContentList.expire;
-        }
-        else if(btnContentList.expire>999){
+        } else if (btnContentList.expire > 999) {
             text += " ";
             text += btnContentList.expire;
-        }
-        else if(btnContentList.expire>99){
+        } else if (btnContentList.expire > 99) {
             text += "  ";
             text += btnContentList.expire;
-        }
-        else if(btnContentList.expire>9){
+        } else if (btnContentList.expire > 9) {
             text += "   ";
             text += btnContentList.expire;
-        }
-        else if(btnContentList.expire > -1){
+        } else if (btnContentList.expire > -1) {
             text += "    ";
             text += btnContentList.expire;
-        }
-        else if(btnContentList.expire > -10){
+        } else if (btnContentList.expire > -10) {
             text += "   ";
             text += btnContentList.expire;
-        }
-        else if(btnContentList.expire>-100){
+        } else if (btnContentList.expire > -100) {
             text += "  ";
             text += btnContentList.expire;
-        }
-        else if(btnContentList.expire>-1000){
+        } else if (btnContentList.expire > -1000) {
             text += " ";
             text += btnContentList.expire;
-        }
-        else{
+        } else {
             text += btnContentList.expire;
         }
         text += "天";
@@ -204,20 +189,20 @@ public class MainActivity extends Activity {
         codeBtn.setTypeface(font);
         codeBtn.setTag(hash);
         codeBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
-        codeBtn.setGravity(Gravity.RIGHT|Gravity.CENTER_VERTICAL);
+        codeBtn.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         codeBtn.setPadding(36, 0, 75, 0);
-        if(!btnContentList.pri0pub1){
+        if (!btnContentList.pri0pub1) {
             codeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.privateicon, 0, 0, 0);
         }
 
-        codeBtn.setOnClickListener( new View.OnClickListener( ) {
+        codeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // btn click process
                 setContentView(R.layout.activity_toolbar);
                 BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
                 navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
+                Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
                 seefoodBtn.setOnClickListener(seefoodbtnlistener);
             }
         });
@@ -225,9 +210,9 @@ public class MainActivity extends Activity {
         //RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams( RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT );
         //rlp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
         constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
-        constraintLayout.addView( codeBtn );
+        constraintLayout.addView(codeBtn);
         applyConstraintSet.clone(constraintLayout);
-        applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 528+132*index);
+        applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 528 + 132 * index);
         applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 60);
         applyConstraintSet.constrainHeight(codeBtn.getId(), 132);
         applyConstraintSet.constrainWidth(codeBtn.getId(), ConstraintSet.WRAP_CONTENT);
@@ -235,37 +220,77 @@ public class MainActivity extends Activity {
         //codeBtn.setLayoutParams( rlp );
     }
 
-    private Button.OnClickListener backwardbtnlistener = new Button.OnClickListener(){
+    private Button.OnClickListener backwardbtnlistener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
             setContentView(R.layout.activity_toolbar);
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-            Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
+            Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
             seefoodBtn.setOnClickListener(seefoodbtnlistener);
         }
     };
 
-    private Button.OnClickListener plusfoodbtnlistener = new Button.OnClickListener(){
+    private Button.OnClickListener plusfoodbtnlistener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            setContentView(R.layout.plus_food);
-            Spinner spinner = (Spinner) findViewById(R.id.spinnerfridge);
-            addsetCenterSpinner(spinner);
-            int quant = 0;
-            TextView txtValue = (TextView) findViewById(R.id.quantity);
-            txtValue.setText(Integer.toString(quant));
-            Spinner spinner2 = (Spinner) findViewById(R.id.spinnercategory);
+            // custom dialog
+            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            final View view = getLayoutInflater().inflate(R.layout.plus_food, null);
+
+            // set the custom dialog components - text, image and button
+            final Spinner spinner = (Spinner) view.findViewById(R.id.spinnerfridge);
+            //addsetCenterSpinner(spinner);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, R.layout.spinnerforadd, getResources().getStringArray(R.array.languages));
+            adapter.setDropDownViewResource(R.layout.spinner_down);
+            spinner.setAdapter(adapter);
+            final int quant = 0;
+            EditText txtValue = (EditText) view.findViewById(R.id.quantity);
+            txtValue.setText(String.format("%d", quant));
+            TextView date = (TextView) view.findViewById(R.id.date);
+            Calendar mCal = Calendar.getInstance();
+            String dateformat = "M/dd";
+            SimpleDateFormat df = new SimpleDateFormat(dateformat);
+            String today = df.format(mCal.getTime());
+            date.setText(today);
+            Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnercategory);
             addsetCenterSpinner2(spinner2);
-            ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
+            ToggleButton togglebutton = (ToggleButton) view.findViewById(R.id.toggle_button);
             togglebutton.setChecked(false);
+
+            Button dialogButton = (Button) view.findViewById(R.id.btnminus);
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    EditText text = (EditText) view.findViewById(R.id.quantity);
+                    int num = Integer.valueOf((String) text.getText().toString());
+                    num--;
+                    text.setText(Integer.toString(num));
+                }
+            });
+            Button plusbtn = (Button) view.findViewById((R.id.btnplus));
+            plusbtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText text = (EditText) view.findViewById(R.id.quantity);
+                    int num = Integer.valueOf((String) text.getText().toString());
+                    num++;
+                    text.setText(String.format("%d", num));
+                }
+            });
+
+            dialog.setView(view);
+            AlertDialog log = dialog.create();
+            log.show();
         }
     };
+
+
 
     private void addsetCenterSpinner2(Spinner spinner1){
         Foodlist list = (Foodlist)getApplicationContext();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this,R.layout.spinnerforadd);
+                MainActivity.this,R.layout.spinnerforadd);
         adapter.setDropDownViewResource(R.layout.spinner_down);
         for(int i = 0; i < list.categorylist.size(); i++) {
             adapter.add(list.categorylist.get(i));
