@@ -79,6 +79,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="1008px"
+        android:layout_marginStart="60px"
+        android:layout_marginTop="528px"
+        android:id="@+id/myscroll"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:id="@+id/mylinear" >
+
+        </LinearLayout>
+    </ScrollView>
+
     <Button
         android:id="@+id/btnplus"
         android:layout_width="108px"
@@ -88,6 +107,19 @@
         android:background="@drawable/plusfood"
         android:gravity="center"
         android:src="@drawable/plusfood"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnfilter"
+        android:layout_width="240px"
+        android:layout_height="96px"
+        android:layout_marginStart="777px"
+        android:layout_marginTop="282px"
+        android:background="@drawable/applyfilter"
+        android:gravity="center"
+        android:src="@drawable/applyfilter"
         android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

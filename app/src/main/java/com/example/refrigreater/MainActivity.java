@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +104,7 @@ public class MainActivity extends Activity {
             Spinner spinner = (Spinner) findViewById(R.id.spinner);
             setCenterSpinner(spinner);
             generateBtnList();
+            plusBtn.bringToFront();
         }
     };
 
@@ -217,14 +219,16 @@ public class MainActivity extends Activity {
 
         //RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams( RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT );
         //rlp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
-        constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
-        constraintLayout.addView(codeBtn);
+        //constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+        LinearLayout linear = (LinearLayout) findViewById(R.id.mylinear);
+        linear.addView(codeBtn);
+        /*constraintLayout.addView(codeBtn);
         applyConstraintSet.clone(constraintLayout);
         applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 528 + 132 * index);
         applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 60);
         applyConstraintSet.constrainHeight(codeBtn.getId(), 132);
         applyConstraintSet.constrainWidth(codeBtn.getId(), ConstraintSet.WRAP_CONTENT);
-        applyConstraintSet.applyTo(constraintLayout);
+        applyConstraintSet.applyTo(constraintLayout);*/
         //codeBtn.setLayoutParams( rlp );
     }
 
@@ -336,10 +340,7 @@ public class MainActivity extends Activity {
                             public void onClick(View v) {
                                 EditText entered = (EditText)view.findViewById(R.id.newcatogary);
                                 Foodlist list = (Foodlist)getApplicationContext();
-                                Foodlist added = new Foodlist();
-                                added.addcategory(entered.getText().toString(), 0);
-                                added.addcategory(entered.getText().toString(), 1);
-                                if(list.categorylist.contains(added.categorylist.get(0))||list.categorylist.contains(added.categorylist.get(1))){
+                                if(list.existedcategory(entered.getText().toString()) == true){
                                     Toast toast = Toast.makeText(MainActivity.this, "此類別已存在", Toast.LENGTH_LONG);
                                     toast.show();
                                 }
@@ -361,6 +362,7 @@ public class MainActivity extends Activity {
                                     Spinner spinner = (Spinner) findViewById(R.id.spinner);
                                     setCenterSpinner(spinner);
                                     generateBtnList();
+                                    plusBtn.bringToFront();
                                 }
                             }
                         });
@@ -393,11 +395,63 @@ public class MainActivity extends Activity {
                         confirmbtn.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Foodlist list = (Foodlist)getApplicationContext();
+                                Foodlist list = (Foodlist) getApplicationContext();
                                 Spinner entered = (Spinner)view.findViewById(R.id.spinnerdelete);
-                                Foodlist tobedelete = new Foodlist();
-                                tobedelete.addcategory(entered.getSelectedItem().toString(), 0);
-                                list.categorylist.remove(tobedelete.categorylist.get(0));
+                                if(list.categorylist.size() < 5){
+                                    Toast toast = Toast.makeText(MainActivity.this, "請選擇類別", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                                else{
+                                    list.changecategory(entered.getSelectedItem().toString());
+                                    list.deletecategory(entered.getSelectedItem().toString());
+                                    loginside.dismiss();
+                                    log.dismiss();
+                                    setContentView(R.layout.activity_see_food);
+                                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                                    Button backBtn = (Button) findViewById(R.id.btnback);
+                                    backBtn.setOnClickListener(backwardbtnlistener);
+                                    Button plusBtn = (Button) findViewById(R.id.btnplus);
+                                    plusBtn.setOnClickListener(plusfoodbtnlistener);
+                                    Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                                    setCenterSpinner(spinner);
+                                    generateBtnList();
+                                    plusBtn.bringToFront();
+                                }
+                            }
+                        });
+
+                        loginside.show();
+                        WindowManager.LayoutParams params = loginside.getWindow().getAttributes();
+                        params.width = 690;
+                        params.height = 495;
+                        loginside.getWindow().setAttributes(params);
+                    }
+                    else if(parent.getSelectedItem().toString().matches("更改預設")){
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                        final View view = getLayoutInflater().inflate(R.layout.changedefault, null);
+                        dialog.setView(view);
+                        final AlertDialog loginside = dialog.create();
+
+                        Button cancelbtn = (Button) view.findViewById((R.id.btncancel));
+                        Button confirmbtn = (Button) view.findViewById(R.id.btnconfirm);
+
+                        Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnerdefault);
+                        addsetCenterSpinner1(spinner2);
+
+                        cancelbtn.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loginside.dismiss();
+                            }
+                        });
+
+                        confirmbtn.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Foodlist list = (Foodlist) getApplicationContext();
+                                Spinner entered = (Spinner)view.findViewById(R.id.spinnerdefault);
+                                list.changedefaultcategory(entered.getSelectedItem().toString());
                                 loginside.dismiss();
                                 log.dismiss();
                                 setContentView(R.layout.activity_see_food);
@@ -410,6 +464,7 @@ public class MainActivity extends Activity {
                                 Spinner spinner = (Spinner) findViewById(R.id.spinner);
                                 setCenterSpinner(spinner);
                                 generateBtnList();
+                                plusBtn.bringToFront();
                             }
                         });
 
@@ -418,10 +473,6 @@ public class MainActivity extends Activity {
                         params.width = 690;
                         params.height = 495;
                         loginside.getWindow().setAttributes(params);
-                    }
-                    else if(parent.getSelectedItem().toString().matches("更改預設")){
-                        Toast toast = Toast.makeText(MainActivity.this, "更改", Toast.LENGTH_LONG);
-                        toast.show();
                     }
                 }
                 public void onNothingSelected(AdapterView parent) {
@@ -489,6 +540,7 @@ public class MainActivity extends Activity {
                         Spinner spinner = (Spinner) findViewById(R.id.spinner);
                         setCenterSpinner(spinner);
                         generateBtnList();
+                        plusBtn.bringToFront();
                     }
                 }
             });
@@ -514,6 +566,21 @@ public class MainActivity extends Activity {
         Collections.sort(list.categorylist, new Sortbyorder());
         for(int i = 0; i < list.categorylist.size(); i++) {
             adapter.add(list.categorylist.get(i).category);
+        }
+        spinner1.setAdapter(adapter);
+    }
+
+    private void addsetCenterSpinner1(Spinner spinner1){
+        Foodlist list = (Foodlist)getApplicationContext();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                MainActivity.this,R.layout.spinnerforadd);
+        adapter.setDropDownViewResource(R.layout.spinner_down);
+        //Sort
+        Collections.sort(list.categorylist, new Sortbyorder());
+        for(int i = 0; i < list.categorylist.size(); i++) {
+            if(list.categorylist.get(i).order != -1) {
+                adapter.add(list.categorylist.get(i).category);
+            }
         }
         spinner1.setAdapter(adapter);
     }

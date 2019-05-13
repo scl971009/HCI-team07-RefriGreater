@@ -18,6 +18,52 @@ public class Foodlist extends Application {
         foodlist.add(new Food(fridge, name, quantity, category, expire, pri0pub1, ps));
     }
 
+    public void deletecategory(String category){
+        for(int i = 0; i < categorylist.size(); i++){
+            if(categorylist.get(i).category.matches(category)){
+                categorylist.remove(categorylist.get(i));
+                break;
+            }
+        }
+    }
+
+    public void changedefaultcategory(String category){
+        for(int i = 0; i < categorylist.size(); i++){
+            if(categorylist.get(i).order == -1)
+                continue;
+            if(categorylist.get(i).category.matches(category)){
+                categorylist.get(i).order = 1;
+            }
+            else{
+                categorylist.get(i).order = 0;
+            }
+        }
+    }
+
+    public void changecategory(String category){
+        String defaultcategory = "";
+        for(int i = 0; i < categorylist.size(); i++){
+            if(categorylist.get(i).order == 1){
+                defaultcategory = categorylist.get(i).category;
+                break;
+            }
+        }
+        for(int i = 0; i < foodlist.size(); i++){
+            if(foodlist.get(i).category.matches(category)){
+                foodlist.get(i).category = defaultcategory;
+            }
+        }
+    }
+
+    public boolean existedcategory(String category){
+        for(int i = 0; i < categorylist.size(); i++){
+            if(categorylist.get(i).category.matches(category)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public class Category{
         public String category;
         public int order;
