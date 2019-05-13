@@ -80,6 +80,14 @@ public class MainActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+    public void switchfilter(View view){
+        LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+        if(linear.getVisibility() == View.GONE)
+            linear.setVisibility(View.VISIBLE);
+        else
+            linear.setVisibility(View.GONE);
+    }
+
     public void onTargetClick(View view) {
         TextView text_id = (TextView) findViewById(R.id.textid);
         ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);

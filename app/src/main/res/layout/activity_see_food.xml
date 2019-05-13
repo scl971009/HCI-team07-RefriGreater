@@ -118,11 +118,31 @@
         android:layout_marginStart="777px"
         android:layout_marginTop="282px"
         android:background="@drawable/applyfilter"
+        android:onClick="switchfilter"
         android:gravity="center"
         android:src="@drawable/applyfilter"
         android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="63px"
+        android:layout_marginTop="378px"
+        android:background="@drawable/rectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="是否為程式設計師?" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnback"
