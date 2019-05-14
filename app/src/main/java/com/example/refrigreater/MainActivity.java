@@ -57,9 +57,9 @@ public class MainActivity extends Activity {
         seefoodBtn.setOnClickListener(seefoodbtnlistener);
 
         Foodlist list = (Foodlist) getApplicationContext();
-        list.add("家", "玉米", 73, "預設", 5, false, "");
-        list.add("家", "起司", 200, "預設", 1000, true, "");
-        list.add("家", "頂級蒲燒鰻", 1, "預設", 0, true, "");
+        list.add("家", "玉米", 73, "預設", 5, false, "", 2019, 6, 27);
+        list.add("家", "起司", 200, "預設", 1000, true, "", 2019, 11, 1);
+        list.add("家", "頂級蒲燒鰻", 1, "預設", 0, true, "", 2019, 4, 15);
         list.addcategory("預設", 1, true);
         list.addcategory("更改預設", -1, true);
         list.addcategory("新增類別", -1, true);
@@ -552,10 +552,152 @@ public class MainActivity extends Activity {
             recipe.setGravity(Gravity.CENTER_VERTICAL);
             edit.setGravity(Gravity.CENTER_VERTICAL);
 
+            edit.setTag(hash);
+
             edit.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View viewn) {
+                    final Foodlist list = (Foodlist)getApplicationContext();
+                    Integer index = 0;
+                    if(viewn instanceof Button) {
+                        if (((Button) viewn).getTag() instanceof Integer) {
+                            index = Integer.parseInt(((Button) viewn).getTag().toString());
+                        }
+                    }
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                    final View view = getLayoutInflater().inflate(R.layout.editfood, null);
 
+                    // set the custom dialog components - text, image and button
+                    final Spinner spinner = (Spinner) view.findViewById(R.id.spinnerfridge);
+                    //addsetCenterSpinner(spinner);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, R.layout.spinnerforadd, getResources().getStringArray(R.array.languages));
+                    adapter.setDropDownViewResource(R.layout.spinner_down);
+                    spinner.setAdapter(adapter);
+                    EditText utxtValue = (EditText) view.findViewById(R.id.username);
+                    utxtValue.setText(list.foodlist.get(index).name);
+                    EditText txtValue = (EditText) view.findViewById(R.id.quantity);
+                    txtValue.setText(String.format("%d", list.foodlist.get(index).quantity));
+                    TextView date = (TextView) view.findViewById(R.id.date);
+                    String today = String.format("%d/%d/%d", list.foodlist.get(index).year, list.foodlist.get(index).month+1, list.foodlist.get(index).day);
+                    date.setText(today);
+                    Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnercategory);
+                    addsetCenterSpinner3(spinner2, index);
+                    ToggleButton togglebutton = (ToggleButton) view.findViewById(R.id.toggle_button);
+                    togglebutton.setChecked(list.foodlist.get(index).pri0pub1);
+
+                    Button dialogButton = (Button) view.findViewById(R.id.btnminus);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new OnClickListener() {
+                        public void onClick(View v) {
+                            EditText text = (EditText) view.findViewById(R.id.quantity);
+                            int num = Integer.valueOf((String) text.getText().toString());
+                            num--;
+                            text.setText(Integer.toString(num));
+                        }
+                    });
+                    Button plusbtn = (Button) view.findViewById((R.id.btnplus));
+                    plusbtn.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            EditText text = (EditText) view.findViewById(R.id.quantity);
+                            int num = Integer.valueOf((String) text.getText().toString());
+                            num++;
+                            text.setText(String.format("%d", num));
+                        }
+                    });
+                    final int indexinside = index;
+                    //calendar
+                    Button canlendarbtn = (Button)view.findViewById(R.id.btncalendar);
+                    canlendarbtn.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatePickerDialog dpd = new DatePickerDialog(MainActivity.this, R.style.AppTheme_DialogTheme, new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker vi, int year, int month, int dayOfMonth) {
+                                    TextView txt = (TextView)view.findViewById(R.id.date);
+                                    txt.setText(String.format("%d/%d/%d",year,  month+1, dayOfMonth));
+                                }
+                            }, list.foodlist.get(indexinside).year, list.foodlist.get(indexinside).month, list.foodlist.get(indexinside).day);
+                            dpd.show();
+                        }
+                    });
+
+                    Button cancelbtn = (Button) view.findViewById((R.id.btncancel));
+                    Button confirmbtn = (Button) view.findViewById(R.id.btnconfirm);
+
+                    dialog.setView(view);
+                    final AlertDialog log = dialog.create();
+
+                    cancelbtn.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            log.dismiss();
+                        }
+                    });
+
+                    confirmbtn.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            EditText editText = (EditText) view.findViewById(R.id.username);
+                            Spinner spinnerc = (Spinner) view.findViewById(R.id.spinnercategory);
+                            if(editText.getText().toString().matches("")){
+                                Toast toast = Toast.makeText(MainActivity.this, "請輸入品項", Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            else if(editText.getText().toString().length()>5){
+                                Toast toast = Toast.makeText(MainActivity.this, "品項名稱太長了", Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            else{
+                                Foodlist list = (Foodlist)getApplicationContext();
+                                Spinner spinnerf = (Spinner) view.findViewById(R.id.spinnerfridge);
+                                EditText quan = (EditText)view.findViewById(R.id.quantity);
+                                ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggle_button);
+                                EditText ps = (EditText)view.findViewById(R.id.ps);
+                                TextView date = (TextView)view.findViewById(R.id.date);
+                                String line = (String) date.getText();
+                                String[] split_line = line.split("/");
+                                int yy = Integer.valueOf(split_line[0]);
+                                int mm = Integer.valueOf(split_line[1]);
+                                int dd =Integer.valueOf(split_line[2]);
+                                DateFormat df = new SimpleDateFormat("yyyy/M/dd");
+                                Calendar c = Calendar.getInstance();
+                                int ny = c.get(Calendar.YEAR);
+                                int nm = c.get(Calendar.MONTH);
+                                int nd = c.get(Calendar.DAY_OF_MONTH);
+                                String now = String.format("%d/%d/%d", ny, (nm+1), nd);
+                                long days = 0;
+                                try {
+                                    Date d1 = df.parse(line);
+                                    Date d2 = df.parse(now);
+                                    long diff = d1.getTime() - d2.getTime();
+                                    days = diff / (1000 * 60 * 60 * 24);
+                                }
+                                catch(ParseException e){
+                                    e.printStackTrace();
+                                }
+                                list.change(indexinside, spinnerf.getSelectedItem().toString(), editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
+                                        spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString(), yy, mm-1, dd);
+                                log.dismiss();
+                                setContentView(R.layout.activity_see_food);
+                                BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                                Button backBtn = (Button) findViewById(R.id.btnback);
+                                backBtn.setOnClickListener(backwardbtnlistener);
+                                Button plusBtn = (Button) findViewById(R.id.btnplus);
+                                plusBtn.setOnClickListener(plusfoodbtnlistener);
+                                Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                                setCenterSpinner(spinner);
+                                for(int i = 0; i < list.categorylist.size(); i++)
+                                    list.categorylist.get(i).onoff = true;
+                                generateBtnList();
+                                generateCheckboxList();
+                                plusBtn.bringToFront();
+                            }
+                        }
+                    });
+
+                    log.show();
                 }
             });
 
@@ -1052,6 +1194,10 @@ public class MainActivity extends Activity {
                         EditText ps = (EditText)view.findViewById(R.id.ps);
                         TextView date = (TextView)view.findViewById(R.id.date);
                         String line = (String) date.getText();
+                        String[] split_line = line.split("/");
+                        int yy = Integer.valueOf(split_line[0]);
+                        int mm = Integer.valueOf(split_line[1]);
+                        int dd =Integer.valueOf(split_line[2]);
                         DateFormat df = new SimpleDateFormat("yyyy/M/dd");
                         Calendar c = Calendar.getInstance();
                         int ny = c.get(Calendar.YEAR);
@@ -1069,7 +1215,7 @@ public class MainActivity extends Activity {
                             e.printStackTrace();
                         }
                         list.add(spinnerf.getSelectedItem().toString(), editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
-                                spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString());
+                                spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString(), yy, mm-1, dd);
                         log.dismiss();
                         setContentView(R.layout.activity_see_food);
                         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -1099,6 +1245,29 @@ public class MainActivity extends Activity {
         public int compare(Foodlist.Category a, Foodlist.Category b) {
             return b.order - a.order;
         }
+    }
+
+    private void addsetCenterSpinner3(Spinner spinner1, int index){
+        Foodlist list = (Foodlist)getApplicationContext();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                MainActivity.this,R.layout.spinnerforadd);
+        adapter.setDropDownViewResource(R.layout.spinner_down);
+        //Sort
+        Collections.sort(list.categorylist, new Sortbyorder());
+        int selected = 0;
+        for(int i = 0; i < list.categorylist.size(); i++){
+            if(list.categorylist.get(i).category.matches(list.foodlist.get(index).category)){
+                adapter.add(list.categorylist.get(i).category);
+                selected = i;
+                break;
+            }
+        }
+        for(int i = 0; i < list.categorylist.size(); i++) {
+            if(i != selected && list.categorylist.get(i).order!=-1) {
+                adapter.add(list.categorylist.get(i).category);
+            }
+        }
+        spinner1.setAdapter(adapter);
     }
 
     private void addsetCenterSpinner2(Spinner spinner1){

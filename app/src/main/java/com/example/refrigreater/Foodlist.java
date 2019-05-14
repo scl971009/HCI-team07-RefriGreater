@@ -16,8 +16,21 @@ public class Foodlist extends Application {
         categorylist.add(new Category(category, order, onoff));
     }
 
-    public void add(String fridge, String name, int quantity, String category, int expire, boolean pri0pub1, String ps){
-        foodlist.add(new Food(fridge, name, quantity, category, expire, pri0pub1, ps));
+    public void change(int index, String fridge, String name, int quantity, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day){
+        foodlist.get(index).fridge = fridge;
+        foodlist.get(index).name = name;
+        foodlist.get(index).quantity = quantity;
+        foodlist.get(index).category = category;
+        foodlist.get(index).expire = expire;
+        foodlist.get(index).pri0pub1 = pri0pub1;
+        foodlist.get(index).ps = ps;
+        foodlist.get(index).year = year;
+        foodlist.get(index).month = month;
+        foodlist.get(index).day = day;
+    }
+
+    public void add(String fridge, String name, int quantity, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day){
+        foodlist.add(new Food(fridge, name, quantity, category, expire, pri0pub1, ps, year, month, day));
     }
 
     public void delete(int i){
@@ -111,8 +124,11 @@ public class Foodlist extends Application {
         public boolean pri0pub1;
         public String fridge;
         public String ps;
+        public int year;
+        public int month;
+        public int day;
 
-        public Food(String fridge, String name, int quantity, String category, int expire, boolean pri0pub1, String ps) {
+        public Food(String fridge, String name, int quantity, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
             this.fridge = fridge;
             this.name = name;
             this.quantity = quantity;
@@ -120,6 +136,9 @@ public class Foodlist extends Application {
             this.expire = expire;
             this.pri0pub1 = pri0pub1;
             this.ps = ps;
+            this.year = year;
+            this.month = month;
+            this.day = day;
         }
     }
 }

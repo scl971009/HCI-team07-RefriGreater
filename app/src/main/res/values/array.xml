@@ -2,7 +2,5 @@
 <resources>
     <string-array name="languages">
     <item>家</item>
-        <item>實驗室</item>
-        <item>測試五個字</item>
     </string-array>
 </resources>
