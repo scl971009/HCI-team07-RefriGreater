@@ -18,10 +18,13 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -57,10 +60,12 @@ public class MainActivity extends Activity {
         list.add("家", "玉米", 73, "預設", 5, false, "");
         list.add("家", "起司", 200, "預設", 1000, true, "");
         list.add("家", "頂級蒲燒鰻", 1, "預設", 0, true, "");
-        list.addcategory("預設", 1);
-        list.addcategory("更改預設", -1);
-        list.addcategory("新增類別", -1);
-        list.addcategory("刪除類別", -1);
+        list.addcategory("預設", 1, true);
+        list.addcategory("更改預設", -1, true);
+        list.addcategory("新增類別", -1, true);
+        list.addcategory("刪除類別", -1, true);
+        list.addMap("全選", View.generateViewId());
+        list.addMap("預設", View.generateViewId());
     }
 
 
@@ -88,6 +93,149 @@ public class MainActivity extends Activity {
             linear.setVisibility(View.GONE);
     }
 
+    public void generateCheckboxList(){
+        Foodlist list = (Foodlist) getApplicationContext();
+
+        if (list.categorylist.size() == 3) {
+            return;
+        }
+
+        CheckBox checkBoxAll = new CheckBox(this);
+        setAll(checkBoxAll, "全選");
+
+        Collections.sort(list.categorylist, new Sortbyorder());
+        for (int index = 0; index < list.categorylist.size(); index++) {
+            CheckBox checkBox = new CheckBox(this);
+            if(list.categorylist.get(index).order != -1) {
+                setCheckBoxAttribute(checkBox, list.categorylist.get(index), index);
+            }
+        }
+    }
+
+    public void setAll(final CheckBox checkBox, String name){
+        Foodlist btnContentList = (Foodlist) getApplicationContext();
+        for(int i = 0; i < btnContentList.Map.size(); i++){
+            if(btnContentList.Map.get(i).category.matches(name))
+                checkBox.setId(btnContentList.Map.get(i).id);
+        }
+        boolean flag = true;
+        for(int i = 0; i < btnContentList.categorylist.size(); i++){
+            if(!btnContentList.categorylist.get(i).onoff){
+                flag = false;
+                break;
+            }
+        }
+        if(flag){
+            checkBox.setChecked(true);
+        }
+        else{
+            checkBox.setChecked(false);
+        }
+        checkBox.setGravity(Gravity.END|Gravity.CENTER_VERTICAL);
+        checkBox.setText(name);
+        checkBox.setPadding(45, 28, 45, 28);
+        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        checkBox.setButtonDrawable(R.drawable.check_box_style);
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Foodlist list = (Foodlist) getApplicationContext();
+                boolean flag = true;
+                for(int i = 1; i < list.Map.size(); i++){
+                    CheckBox checkBox1 = (CheckBox) findViewById(list.Map.get(i).id);
+                    if(!checkBox1.isChecked()){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(isChecked){
+                    for(int i = 0; i < list.Map.size(); i++){
+                        CheckBox checkBox1 = (CheckBox) findViewById(list.Map.get(i).id);
+                        checkBox1.setChecked(true);
+                    }
+                }
+                else if(flag){
+                    for(int i = 0; i < list.Map.size(); i++){
+                        CheckBox checkBox1 = (CheckBox) findViewById(list.Map.get(i).id);
+                        checkBox1.setChecked(false);
+                    }
+                }
+                LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
+                ll.removeAllViews();
+                generateBtnList();
+            }
+        });
+
+        LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+        linear.addView(checkBox);
+    }
+
+    public void setCheckBoxAttribute(final CheckBox checkBox, final Foodlist.Category category, int index){
+        Foodlist list = (Foodlist) getApplicationContext();
+        for(int i = 0; i < list.Map.size(); i++){
+            if(list.Map.get(i).category.matches(category.category))
+                checkBox.setId(list.Map.get(i).id);
+        }
+        checkBox.setTag(index + "category");
+        for(int i = 0; i < list.categorylist.size(); i++){
+            if(list.categorylist.get(i).category.matches(category.category)){
+                if(list.categorylist.get(i).onoff){
+                    checkBox.setChecked(true);
+                }
+                else{
+                    checkBox.setChecked(false);
+                }
+            }
+        }
+        checkBox.setGravity(Gravity.END|Gravity.CENTER_VERTICAL);
+        checkBox.setText(category.category);
+        checkBox.setPadding(45, 28, 45, 28);
+        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        checkBox.setButtonDrawable(R.drawable.check_box_style);
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Foodlist list = (Foodlist) getApplicationContext();
+                if(isChecked){
+                    boolean flag = true;
+                    for(int i = 1; i < list.Map.size(); i++){
+                        CheckBox checkBox1 = (CheckBox) findViewById(list.Map.get(i).id);
+                        if(!checkBox1.isChecked()){
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if(flag){
+                        CheckBox checkBox1 = (CheckBox) findViewById(list.Map.get(0).id);
+                        checkBox1.setChecked(true);
+                    }
+                    for(int i = 0; i < list.categorylist.size(); i++){
+                        if(list.categorylist.get(i).category.matches(buttonView.getText().toString()))
+                            list.categorylist.get(i).onoff = true;
+                    }
+                }
+                else{
+                    CheckBox checkBox1 = (CheckBox) findViewById(list.Map.get(0).id);
+                    if(checkBox1.isChecked()){
+                        checkBox1.setChecked(false);
+                    }
+                    for(int i = 0; i < list.categorylist.size(); i++){
+                        if(list.categorylist.get(i).category.matches(buttonView.getText().toString()))
+                            list.categorylist.get(i).onoff = false;
+                    }
+                }
+                LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
+                ll.removeAllViews();
+                generateBtnList();
+            }
+        });
+
+        LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+        linear.addView(checkBox);
+    }
+
     public void onTargetClick(View view) {
         TextView text_id = (TextView) findViewById(R.id.textid);
         ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
@@ -111,7 +259,11 @@ public class MainActivity extends Activity {
             plusBtn.setOnClickListener(plusfoodbtnlistener);
             Spinner spinner = (Spinner) findViewById(R.id.spinner);
             setCenterSpinner(spinner);
+            Foodlist list = (Foodlist) getApplicationContext();
+            for(int i = 0; i < list.categorylist.size(); i++)
+                list.categorylist.get(i).onoff = true;
             generateBtnList();
+            generateCheckboxList();
             plusBtn.bringToFront();
         }
     };
@@ -124,20 +276,352 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void generateBtnList() {
+    private void regenerateBtnList(int special) {
         Foodlist btnContentList = (Foodlist) getApplicationContext();
 
-        if (null == btnContentList) {
+        if (null == btnContentList.foodlist) {
             return;
         }
 
         Collections.sort(btnContentList.foodlist, new Sortbyexpire());
         int count = 0;
         for (int index = 0; index < btnContentList.foodlist.size(); index++) {
-            Button codeBtn = new Button(this);
-            setBtnAttribute(codeBtn, btnContentList.foodlist.get(index), count, index);
-            count++;
+            for(int i = 0; i < btnContentList.categorylist.size(); i++){
+                if(btnContentList.categorylist.get(i).category.matches(btnContentList.foodlist.get(index).category)){
+                    if(btnContentList.categorylist.get(i).onoff){
+                        Button codeBtn = new Button(this);
+                        resetBtnAttribute(codeBtn, btnContentList.foodlist.get(index), count, index, special);
+                        count++;
+                    }
+                    break;
+                }
+            }
         }
+    }
+
+    private void generateBtnList() {
+        Foodlist btnContentList = (Foodlist) getApplicationContext();
+
+        if (null == btnContentList.foodlist) {
+            return;
+        }
+
+        Collections.sort(btnContentList.foodlist, new Sortbyexpire());
+        int count = 0;
+        for (int index = 0; index < btnContentList.foodlist.size(); index++) {
+            for(int i = 0; i < btnContentList.categorylist.size(); i++){
+                if(btnContentList.categorylist.get(i).category.matches(btnContentList.foodlist.get(index).category)){
+                    if(btnContentList.categorylist.get(i).onoff){
+                        Button codeBtn = new Button(this);
+                        setBtnAttribute(codeBtn, btnContentList.foodlist.get(index), count, index);
+                        count++;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private void resetBtnAttribute(Button codeBtn, Foodlist.Food btnContentList, int index, int hash, int special) {
+        if(hash != special) {
+            codeBtn.setId(View.generateViewId());
+            if (btnContentList.expire < 3) {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.backred, null));
+            } else if (btnContentList.expire > 5) {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.backgreen, null));
+            } else {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.backyellow, null));
+            }
+            String text = btnContentList.name;
+            for (int i = 0; i < 5 - btnContentList.name.length(); i++) {
+                text += "　";
+            }
+            //text += String.format("%4d\t%6d\t%s", btnContentList.quantity, btnContentList.expire, "天");
+            if (btnContentList.quantity > 999) {
+                text += btnContentList.quantity;
+            } else if (btnContentList.quantity > 99) {
+                text += " ";
+                text += btnContentList.quantity;
+            } else if (btnContentList.quantity > 9) {
+                text += "  ";
+                text += btnContentList.quantity;
+            } else if (btnContentList.quantity > -1) {
+                text += "   ";
+                text += btnContentList.quantity;
+            } else if (btnContentList.quantity > -10) {
+                text += "  ";
+                text += btnContentList.quantity;
+            } else if (btnContentList.quantity > -100) {
+                text += " ";
+                text += btnContentList.quantity;
+            } else {
+                text += btnContentList.quantity;
+            }
+            //text+="　";
+            if (btnContentList.expire > 9999) {
+                text += btnContentList.expire;
+            } else if (btnContentList.expire > 999) {
+                text += " ";
+                text += btnContentList.expire;
+            } else if (btnContentList.expire > 99) {
+                text += "  ";
+                text += btnContentList.expire;
+            } else if (btnContentList.expire > 9) {
+                text += "   ";
+                text += btnContentList.expire;
+            } else if (btnContentList.expire > -1) {
+                text += "    ";
+                text += btnContentList.expire;
+            } else if (btnContentList.expire > -10) {
+                text += "   ";
+                text += btnContentList.expire;
+            } else if (btnContentList.expire > -100) {
+                text += "  ";
+                text += btnContentList.expire;
+            } else if (btnContentList.expire > -1000) {
+                text += " ";
+                text += btnContentList.expire;
+            } else {
+                text += btnContentList.expire;
+            }
+            text += "天";
+            codeBtn.setText(text);
+            Typeface font = Typeface.createFromAsset(getAssets(), "fonts/RobotoMono-Regular.ttf");
+            codeBtn.setTypeface(font);
+            codeBtn.setTag(hash);
+            codeBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
+            codeBtn.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            if (!btnContentList.pri0pub1) {
+                codeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.privateicon, 0, 0, 0);
+                codeBtn.setPadding(36, 0, 0, 0);
+                codeBtn.setCompoundDrawablePadding(27);
+            } else {
+                codeBtn.setPadding(159, 0, 0, 0);
+            }
+
+            codeBtn.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Integer index = 0;
+                    int[] location = new int[2];
+                    Foodlist list = (Foodlist) getApplicationContext();
+                    if (v instanceof Button) {
+                        if (((Button) v).getTag() instanceof Integer) {
+                            index = Integer.parseInt(((Button) v).getTag().toString());
+                        }
+                        setContentView(R.layout.activity_see_food);
+                        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                        Button backBtn = (Button) findViewById(R.id.btnback);
+                        backBtn.setOnClickListener(backwardbtnlistener);
+                        Button plusBtn = (Button) findViewById(R.id.btnplus);
+                        plusBtn.setOnClickListener(plusfoodbtnlistener);
+                        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                        setCenterSpinner(spinner);
+                        regenerateBtnList(index);
+                        generateCheckboxList();
+                        plusBtn.bringToFront();
+                    }
+                    return true;
+                }
+            });
+            //constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+            LinearLayout linear = (LinearLayout) findViewById(R.id.mylinear);
+            LinearLayout contain = new LinearLayout(MainActivity.this);
+            contain.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            contain.setLayoutParams(params);
+            contain.addView(codeBtn);
+            LinearLayout.LayoutParams pac = new LinearLayout.LayoutParams(960, 132);
+            pac.setMargins(0, 0, 0, 0);
+            codeBtn.setLayoutParams(pac);
+            linear.addView(contain);
+        }
+        else{
+            codeBtn.setId(View.generateViewId());
+            final Button delete = new Button(MainActivity.this);
+            Button recipe = new Button(MainActivity.this);
+            Button edit = new Button(MainActivity.this);
+            delete.setId(View.generateViewId());
+            recipe.setId(View.generateViewId());
+            edit.setId(View.generateViewId());
+            if (btnContentList.expire < 3) {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.longpress1, null));
+                recipe.setBackground(getResources().getDrawable(R.drawable.longpress2, null));
+                edit.setBackground(getResources().getDrawable(R.drawable.longpress3, null));
+                delete.setBackground(getResources().getDrawable(R.drawable.longpress4, null));
+            } else if (btnContentList.expire > 5) {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.longpress9, null));
+                recipe.setBackground(getResources().getDrawable(R.drawable.longpress10, null));
+                edit.setBackground(getResources().getDrawable(R.drawable.longpress11, null));
+                delete.setBackground(getResources().getDrawable(R.drawable.longpress12, null));
+            } else {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.longpress5, null));
+                recipe.setBackground(getResources().getDrawable(R.drawable.longpress6, null));
+                edit.setBackground(getResources().getDrawable(R.drawable.longpress7, null));
+                delete.setBackground(getResources().getDrawable(R.drawable.longpress8, null));
+            }
+            String text = btnContentList.name;
+            codeBtn.setText(text);
+            Typeface font = Typeface.createFromAsset(getAssets(), "fonts/RobotoMono-Regular.ttf");
+            codeBtn.setTypeface(font);
+            codeBtn.setTag(hash);
+            codeBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
+            codeBtn.setGravity(Gravity.CENTER_VERTICAL);
+            if (!btnContentList.pri0pub1) {
+                codeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.privateicon, 0, 0, 0);
+                codeBtn.setPadding(36, 0, 0, 0);
+                codeBtn.setCompoundDrawablePadding(27);
+            } else {
+                codeBtn.setPadding(159, 0, 0, 0);
+            }
+
+            codeBtn.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Foodlist list = (Foodlist) getApplicationContext();
+                    setContentView(R.layout.activity_see_food);
+                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                    Button backBtn = (Button) findViewById(R.id.btnback);
+                    backBtn.setOnClickListener(backwardbtnlistener);
+                    Button plusBtn = (Button) findViewById(R.id.btnplus);
+                    plusBtn.setOnClickListener(plusfoodbtnlistener);
+                    Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                    setCenterSpinner(spinner);
+                    generateBtnList();
+                    generateCheckboxList();
+                    plusBtn.bringToFront();
+                    return true;
+                }
+            });
+            delete.setTag(hash);
+            delete.setGravity(Gravity.CENTER_VERTICAL);
+            delete.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(final View viewn) {
+                    //setContentView(R.layout.deletefood);
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                    final View view = getLayoutInflater().inflate(R.layout.deletefood, null);
+                    dialog.setView(view);
+                    final AlertDialog loginside = dialog.create();
+
+                    Button cancelbtn = (Button) view.findViewById((R.id.btncancel));
+                    Button confirmbtn = (Button) view.findViewById(R.id.btndelete);
+
+                    cancelbtn.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            loginside.dismiss();
+                        }
+                    });
+
+                    confirmbtn.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Integer index = 0;
+                            Foodlist list = (Foodlist)getApplicationContext();
+                            if(viewn instanceof Button) {
+                                if (((Button) viewn).getTag() instanceof Integer) {
+                                    index = Integer.parseInt(((Button) viewn).getTag().toString());
+                                }
+                            }
+                            list.delete(index);
+                            loginside.dismiss();
+                            setContentView(R.layout.activity_see_food);
+                            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                            Button backBtn = (Button) findViewById(R.id.btnback);
+                            backBtn.setOnClickListener(backwardbtnlistener);
+                            Button plusBtn = (Button) findViewById(R.id.btnplus);
+                            plusBtn.setOnClickListener(plusfoodbtnlistener);
+                            Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                            setCenterSpinner(spinner);
+                            generateBtnList();
+                            generateCheckboxList();
+                            plusBtn.bringToFront();
+                        }
+                    });
+                    loginside.show();
+                    WindowManager.LayoutParams params = loginside.getWindow().getAttributes();
+                    params.width = 690;
+                    params.height = 495;
+                    loginside.getWindow().setAttributes(params);
+                }
+            });
+            recipe.setGravity(Gravity.CENTER_VERTICAL);
+            edit.setGravity(Gravity.CENTER_VERTICAL);
+
+            edit.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            LinearLayout linear = (LinearLayout) findViewById(R.id.mylinear);
+            LinearLayout contain = new LinearLayout(MainActivity.this);
+            contain.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, 0);
+            contain.setBaselineAligned(false);
+            contain.setLayoutParams(params);
+            contain.addView(codeBtn);
+            contain.addView(recipe);
+            contain.addView(edit);
+            contain.addView(delete);
+            if(btnContentList.expire<3) {
+                LinearLayout.LayoutParams pac = new LinearLayout.LayoutParams(562, 132);
+                pac.setMargins(0, 0, 0, 0);
+                codeBtn.setLayoutParams(pac);
+                LinearLayout.LayoutParams pad = new LinearLayout.LayoutParams(163, 132);
+                pad.setMargins(0, 0, 0, 0);
+                delete.setLayoutParams(pad);
+                LinearLayout.LayoutParams par = new LinearLayout.LayoutParams(115, 132);
+                par.setMargins(0, 0, 0, 0);
+                recipe.setLayoutParams(par);
+                LinearLayout.LayoutParams pae = new LinearLayout.LayoutParams(120, 132);
+                pae.setMargins(0, 0, 0, 0);
+                edit.setLayoutParams(pae);
+            }
+            else if(btnContentList.expire>5){
+                LinearLayout.LayoutParams pac = new LinearLayout.LayoutParams(558, 132);
+                pac.setMargins(0, 0, 0, 0);
+                codeBtn.setLayoutParams(pac);
+                LinearLayout.LayoutParams pad = new LinearLayout.LayoutParams(164, 132);
+                pad.setMargins(0, 0, 0, 0);
+                delete.setLayoutParams(pad);
+                LinearLayout.LayoutParams par = new LinearLayout.LayoutParams(120, 132);
+                par.setMargins(0, 0, 0, 0);
+                recipe.setLayoutParams(par);
+                LinearLayout.LayoutParams pae = new LinearLayout.LayoutParams(118, 132);
+                pae.setMargins(0, 0, 0, 0);
+                edit.setLayoutParams(pae);
+            }
+            else{
+                LinearLayout.LayoutParams pac = new LinearLayout.LayoutParams(563, 132);
+                pac.setMargins(0, 0, 0, 0);
+                codeBtn.setLayoutParams(pac);
+                LinearLayout.LayoutParams pad = new LinearLayout.LayoutParams(165, 132);
+                pad.setMargins(0, 0, 0, 0);
+                delete.setLayoutParams(pad);
+                LinearLayout.LayoutParams par = new LinearLayout.LayoutParams(115, 132);
+                par.setMargins(0, 0, 0, 0);
+                recipe.setLayoutParams(par);
+                LinearLayout.LayoutParams pae = new LinearLayout.LayoutParams(117, 132);
+                pae.setMargins(0, 0, 0, 0);
+                edit.setLayoutParams(pae);
+            }
+            //delete.bringToFront();
+            linear.addView(contain);
+        }
+        /*constraintLayout.addView(codeBtn);
+        applyConstraintSet.clone(constraintLayout);
+        applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 528 + 132 * index);
+        applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 60);
+        applyConstraintSet.constrainHeight(codeBtn.getId(), 132);
+        applyConstraintSet.constrainWidth(codeBtn.getId(), ConstraintSet.WRAP_CONTENT);
+        applyConstraintSet.applyTo(constraintLayout);*/
     }
 
     private void setBtnAttribute(Button codeBtn, Foodlist.Food btnContentList, int index, int hash) {
@@ -207,29 +691,52 @@ public class MainActivity extends Activity {
         codeBtn.setTypeface(font);
         codeBtn.setTag(hash);
         codeBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
-        codeBtn.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        codeBtn.setPadding(36, 0, 75, 0);
+        codeBtn.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         if (!btnContentList.pri0pub1) {
             codeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.privateicon, 0, 0, 0);
+            codeBtn.setPadding(36, 0, 0, 0);
+            codeBtn.setCompoundDrawablePadding(27);
+        }
+        else{
+            codeBtn.setPadding(159, 0, 0, 0);
         }
 
-        codeBtn.setOnClickListener(new View.OnClickListener() {
+        codeBtn.setOnLongClickListener(new OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                // btn click process
-                setContentView(R.layout.activity_toolbar);
-                BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
-                seefoodBtn.setOnClickListener(seefoodbtnlistener);
+            public boolean onLongClick(View v) {
+                Integer index = 0;
+                Foodlist list = (Foodlist)getApplicationContext();
+                if(v instanceof Button) {
+                    if (((Button) v).getTag() instanceof Integer) {
+                        index = Integer.parseInt(((Button) v).getTag().toString());
+                    }
+                    setContentView(R.layout.activity_see_food);
+                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                    Button backBtn = (Button) findViewById(R.id.btnback);
+                    backBtn.setOnClickListener(backwardbtnlistener);
+                    Button plusBtn = (Button) findViewById(R.id.btnplus);
+                    plusBtn.setOnClickListener(plusfoodbtnlistener);
+                    Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                    setCenterSpinner(spinner);
+                    regenerateBtnList(index);
+                    generateCheckboxList();
+                    plusBtn.bringToFront();
+                }
+                return true;
             }
         });
-
-        //RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams( RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT );
-        //rlp.addRule( RelativeLayout.ALIGN_PARENT_LEFT );
         //constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
         LinearLayout linear = (LinearLayout) findViewById(R.id.mylinear);
-        linear.addView(codeBtn);
+        LinearLayout contain = new LinearLayout(MainActivity.this);
+        contain.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        contain.setLayoutParams(params);
+        contain.addView(codeBtn);
+        LinearLayout.LayoutParams pac = new LinearLayout.LayoutParams(960, 132);
+        pac.setMargins(0, 0, 0, 0);
+        codeBtn.setLayoutParams(pac);
+        linear.addView(contain);
         /*constraintLayout.addView(codeBtn);
         applyConstraintSet.clone(constraintLayout);
         applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 528 + 132 * index);
@@ -237,7 +744,6 @@ public class MainActivity extends Activity {
         applyConstraintSet.constrainHeight(codeBtn.getId(), 132);
         applyConstraintSet.constrainWidth(codeBtn.getId(), ConstraintSet.WRAP_CONTENT);
         applyConstraintSet.applyTo(constraintLayout);*/
-        //codeBtn.setLayoutParams( rlp );
     }
 
     private Button.OnClickListener backwardbtnlistener = new Button.OnClickListener() {
@@ -356,8 +862,25 @@ public class MainActivity extends Activity {
                                     Toast toast = Toast.makeText(MainActivity.this, "請輸入類別", Toast.LENGTH_LONG);
                                     toast.show();
                                 }
+                                else if(entered.getText().toString().matches("全選")){
+                                    Toast toast = Toast.makeText(MainActivity.this, "類別不能叫做全選", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                                else if(entered.getText().toString().matches("更改預設")){
+                                    Toast toast = Toast.makeText(MainActivity.this, "類別不能叫做更改預設", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                                else if(entered.getText().toString().matches("刪除類別")){
+                                    Toast toast = Toast.makeText(MainActivity.this, "類別不能叫做刪除類別", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                                else if(entered.getText().toString().matches("新增類別")){
+                                    Toast toast = Toast.makeText(MainActivity.this, "類別不能叫做新增類別", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
                                 else{
-                                    list.addcategory(entered.getText().toString(), 0);
+                                    list.addMap(entered.getText().toString(), View.generateViewId());
+                                    list.addcategory(entered.getText().toString(), 0, true);
                                     loginside.dismiss();
                                     log.dismiss();
                                     setContentView(R.layout.activity_see_food);
@@ -369,7 +892,10 @@ public class MainActivity extends Activity {
                                     plusBtn.setOnClickListener(plusfoodbtnlistener);
                                     Spinner spinner = (Spinner) findViewById(R.id.spinner);
                                     setCenterSpinner(spinner);
+                                    for(int i = 0; i < list.categorylist.size(); i++)
+                                        list.categorylist.get(i).onoff = true;
                                     generateBtnList();
+                                    generateCheckboxList();
                                     plusBtn.bringToFront();
                                 }
                             }
@@ -410,6 +936,7 @@ public class MainActivity extends Activity {
                                     toast.show();
                                 }
                                 else{
+                                    list.deleteMap(entered.getSelectedItem().toString());
                                     list.changecategory(entered.getSelectedItem().toString());
                                     list.deletecategory(entered.getSelectedItem().toString());
                                     loginside.dismiss();
@@ -423,7 +950,10 @@ public class MainActivity extends Activity {
                                     plusBtn.setOnClickListener(plusfoodbtnlistener);
                                     Spinner spinner = (Spinner) findViewById(R.id.spinner);
                                     setCenterSpinner(spinner);
+                                    for(int i = 0; i < list.categorylist.size(); i++)
+                                        list.categorylist.get(i).onoff = true;
                                     generateBtnList();
+                                    generateCheckboxList();
                                     plusBtn.bringToFront();
                                 }
                             }
@@ -431,8 +961,8 @@ public class MainActivity extends Activity {
 
                         loginside.show();
                         WindowManager.LayoutParams params = loginside.getWindow().getAttributes();
-                        params.width = 690;
-                        params.height = 495;
+                        params.width = 900;
+                        params.height = 690;
                         loginside.getWindow().setAttributes(params);
                     }
                     else if(parent.getSelectedItem().toString().matches("更改預設")){
@@ -471,7 +1001,10 @@ public class MainActivity extends Activity {
                                 plusBtn.setOnClickListener(plusfoodbtnlistener);
                                 Spinner spinner = (Spinner) findViewById(R.id.spinner);
                                 setCenterSpinner(spinner);
+                                for(int i = 0; i < list.categorylist.size(); i++)
+                                    list.categorylist.get(i).onoff = true;
                                 generateBtnList();
+                                generateCheckboxList();
                                 plusBtn.bringToFront();
                             }
                         });
@@ -547,7 +1080,10 @@ public class MainActivity extends Activity {
                         plusBtn.setOnClickListener(plusfoodbtnlistener);
                         Spinner spinner = (Spinner) findViewById(R.id.spinner);
                         setCenterSpinner(spinner);
+                        for(int i = 0; i < list.categorylist.size(); i++)
+                            list.categorylist.get(i).onoff = true;
                         generateBtnList();
+                        generateCheckboxList();
                         plusBtn.bringToFront();
                     }
                 }

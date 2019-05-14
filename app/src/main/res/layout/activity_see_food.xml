@@ -81,7 +81,7 @@
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
+        android:layout_width="960px"
         android:layout_height="1008px"
         android:layout_marginStart="60px"
         android:layout_marginTop="528px"
@@ -130,17 +130,12 @@
         android:id="@+id/filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginEnd="63px"
         android:layout_marginTop="378px"
         android:background="@drawable/rectangle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <CheckBox
-            android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="是否為程式設計師?" />
 
     </LinearLayout>
 

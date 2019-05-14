@@ -10,12 +10,18 @@ public class Foodlist extends Application {
 
     public ArrayList<Category> categorylist = new ArrayList<>();
 
-    public void addcategory(String category, int order){
-        categorylist.add(new Category(category, order));
+    public ArrayList<IdMapCategory> Map = new ArrayList<>();
+
+    public void addcategory(String category, int order, boolean onoff){
+        categorylist.add(new Category(category, order, onoff));
     }
 
     public void add(String fridge, String name, int quantity, String category, int expire, boolean pri0pub1, String ps){
         foodlist.add(new Food(fridge, name, quantity, category, expire, pri0pub1, ps));
+    }
+
+    public void delete(int i){
+        foodlist.remove(foodlist.get(i));
     }
 
     public void deletecategory(String category){
@@ -64,12 +70,36 @@ public class Foodlist extends Application {
         return false;
     }
 
+    public void addMap(String category, int id){
+        Map.add(new IdMapCategory(category, id));
+    }
+
+    public void deleteMap(String category){
+        for(int i = 0; i < Map.size(); i++){
+            if(Map.get(i).category.matches(category)){
+                Map.remove(Map.get(i));
+                break;
+            }
+        }
+    }
+
+    public class IdMapCategory{
+        public int id;
+        public String category;
+        public IdMapCategory(String category, int id){
+            this.category = category;
+            this.id = id;
+        }
+    }
+
     public class Category{
         public String category;
         public int order;
-        public Category(String category, int order){
+        public boolean onoff;
+        public Category(String category, int order, boolean onoff){
             this.category = category;
             this.order = order;
+            this.onoff = onoff;
         }
     }
 

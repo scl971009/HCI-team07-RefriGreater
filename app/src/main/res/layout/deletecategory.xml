@@ -2,16 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="690px"
-    android:layout_height="495px"
+    android:layout_width="900px"
+    android:layout_height="690px"
     android:background="@drawable/deletecategory">
 
     <Spinner
         android:id="@+id/spinnerdelete"
         android:layout_width="430px"
         android:layout_height="81px"
-        android:layout_marginTop="135px"
-        android:layout_marginLeft="55px"
+        android:layout_marginTop="155px"
+        android:layout_marginLeft="160px"
         android:textAlignment="center"
         android:textSize="20sp"
         style="@style/addSpinnerTheme"
@@ -21,15 +21,15 @@
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="200px"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btncancel"
             android:layout_width="240px"
             android:layout_height="96px"
-            android:layout_marginTop="45px"
-            android:layout_marginStart="35px"
+            android:layout_marginTop="205px"
+            android:layout_marginStart="135px"
             android:background="@drawable/cancel"
             android:gravity="center"
             android:src="@drawable/cancel"
@@ -41,8 +41,8 @@
             android:id="@+id/btndelete"
             android:layout_width="240px"
             android:layout_height="96px"
-            android:layout_marginTop="45px"
-            android:layout_marginStart="35px"
+            android:layout_marginTop="205px"
+            android:layout_marginStart="40px"
             android:background="@drawable/delete"
             android:gravity="center"
             android:src="@drawable/delete"
