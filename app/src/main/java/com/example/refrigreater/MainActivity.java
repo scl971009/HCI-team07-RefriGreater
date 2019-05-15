@@ -575,6 +575,8 @@ public class MainActivity extends Activity {
                     spinner.setAdapter(adapter);
                     EditText utxtValue = (EditText) view.findViewById(R.id.username);
                     utxtValue.setText(list.foodlist.get(index).name);
+                    EditText psText = (EditText) view.findViewById(R.id.ps);
+                    psText.setText(list.foodlist.get(index).ps);
                     EditText txtValue = (EditText) view.findViewById(R.id.quantity);
                     txtValue.setText(String.format("%d", list.foodlist.get(index).quantity));
                     TextView date = (TextView) view.findViewById(R.id.date);
