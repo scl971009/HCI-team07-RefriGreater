@@ -159,8 +159,8 @@
         android:layout_marginStart="260px"
         android:layout_marginTop="297px"
         android:textAlignment="center"
+        android:textSize="16sp"
         style="@style/SpinnerTheme"
-        android:entries="@array/languages"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
