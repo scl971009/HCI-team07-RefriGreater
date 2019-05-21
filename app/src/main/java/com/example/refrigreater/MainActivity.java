@@ -46,15 +46,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_toolbar);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
-        togglebutton.setChecked(false);
-
-        Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
-        seefoodBtn.setOnClickListener(seefoodbtnlistener);
+        call_main();
 
         Foodlist list = (Foodlist) getApplicationContext();
         list.add("家", "玉米", 73, "預設", 5, false, "", 2019, 6, 27);
@@ -68,17 +60,39 @@ public class MainActivity extends Activity {
         list.addMap("預設", View.generateViewId());
     }
 
+    public void call_main(){
+        setContentView(R.layout.activity_toolbar);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
+        seefoodBtn.setOnClickListener(seefoodbtnlistener);
+    }
+
+    public void call_seefood(){
+        Foodlist list = (Foodlist) getApplicationContext();
+        setContentView(R.layout.activity_see_food);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        Button backBtn = (Button) findViewById(R.id.btnback);
+        backBtn.setOnClickListener(backwardbtnlistener);
+        Button plusBtn = (Button) findViewById(R.id.btnplus);
+        plusBtn.setOnClickListener(plusfoodbtnlistener);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        setCenterSpinner(spinner);
+        for(int i = 0; i < list.categorylist.size(); i++)
+            list.categorylist.get(i).onoff = true;
+        generateBtnList();
+        generateCheckboxList();
+        plusBtn.bringToFront();
+    }
+
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             // Show home screen when pressing “back” button,
             //  so that this app won’t be closed accidentally
-            setContentView(R.layout.activity_toolbar);
-            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-            Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
-            seefoodBtn.setOnClickListener(seefoodbtnlistener);
+            call_main();
             return true;
         }
 
@@ -236,6 +250,10 @@ public class MainActivity extends Activity {
         linear.addView(checkBox);
     }
 
+    public void add_fridge(View view){
+        setContentView(R.layout.new_fridge);
+    }
+
     public void onTargetClick(View view) {
         TextView text_id = (TextView) findViewById(R.id.textid);
         ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
@@ -250,21 +268,7 @@ public class MainActivity extends Activity {
     private Button.OnClickListener seefoodbtnlistener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            setContentView(R.layout.activity_see_food);
-            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-            Button backBtn = (Button) findViewById(R.id.btnback);
-            backBtn.setOnClickListener(backwardbtnlistener);
-            Button plusBtn = (Button) findViewById(R.id.btnplus);
-            plusBtn.setOnClickListener(plusfoodbtnlistener);
-            Spinner spinner = (Spinner) findViewById(R.id.spinner);
-            setCenterSpinner(spinner);
-            Foodlist list = (Foodlist) getApplicationContext();
-            for(int i = 0; i < list.categorylist.size(); i++)
-                list.categorylist.get(i).onoff = true;
-            generateBtnList();
-            generateCheckboxList();
-            plusBtn.bringToFront();
+            call_seefood();
         }
     };
 
@@ -681,20 +685,7 @@ public class MainActivity extends Activity {
                                 list.change(indexinside, spinnerf.getSelectedItem().toString(), editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
                                         spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString(), yy, mm-1, dd);
                                 log.dismiss();
-                                setContentView(R.layout.activity_see_food);
-                                BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                                Button backBtn = (Button) findViewById(R.id.btnback);
-                                backBtn.setOnClickListener(backwardbtnlistener);
-                                Button plusBtn = (Button) findViewById(R.id.btnplus);
-                                plusBtn.setOnClickListener(plusfoodbtnlistener);
-                                Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                                setCenterSpinner(spinner);
-                                for(int i = 0; i < list.categorylist.size(); i++)
-                                    list.categorylist.get(i).onoff = true;
-                                generateBtnList();
-                                generateCheckboxList();
-                                plusBtn.bringToFront();
+                                call_seefood();
                             }
                         }
                     });
@@ -893,11 +884,7 @@ public class MainActivity extends Activity {
     private Button.OnClickListener backwardbtnlistener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            setContentView(R.layout.activity_toolbar);
-            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-            Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
-            seefoodBtn.setOnClickListener(seefoodbtnlistener);
+            call_main();
         }
     };
 
@@ -1027,20 +1014,7 @@ public class MainActivity extends Activity {
                                     list.addcategory(entered.getText().toString(), 0, true);
                                     loginside.dismiss();
                                     log.dismiss();
-                                    setContentView(R.layout.activity_see_food);
-                                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                                    Button backBtn = (Button) findViewById(R.id.btnback);
-                                    backBtn.setOnClickListener(backwardbtnlistener);
-                                    Button plusBtn = (Button) findViewById(R.id.btnplus);
-                                    plusBtn.setOnClickListener(plusfoodbtnlistener);
-                                    Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                                    setCenterSpinner(spinner);
-                                    for(int i = 0; i < list.categorylist.size(); i++)
-                                        list.categorylist.get(i).onoff = true;
-                                    generateBtnList();
-                                    generateCheckboxList();
-                                    plusBtn.bringToFront();
+                                    call_seefood();
                                 }
                             }
                         });
@@ -1085,20 +1059,7 @@ public class MainActivity extends Activity {
                                     list.deletecategory(entered.getSelectedItem().toString());
                                     loginside.dismiss();
                                     log.dismiss();
-                                    setContentView(R.layout.activity_see_food);
-                                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                                    Button backBtn = (Button) findViewById(R.id.btnback);
-                                    backBtn.setOnClickListener(backwardbtnlistener);
-                                    Button plusBtn = (Button) findViewById(R.id.btnplus);
-                                    plusBtn.setOnClickListener(plusfoodbtnlistener);
-                                    Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                                    setCenterSpinner(spinner);
-                                    for(int i = 0; i < list.categorylist.size(); i++)
-                                        list.categorylist.get(i).onoff = true;
-                                    generateBtnList();
-                                    generateCheckboxList();
-                                    plusBtn.bringToFront();
+                                    call_seefood();
                                 }
                             }
                         });
@@ -1136,20 +1097,7 @@ public class MainActivity extends Activity {
                                 list.changedefaultcategory(entered.getSelectedItem().toString());
                                 loginside.dismiss();
                                 log.dismiss();
-                                setContentView(R.layout.activity_see_food);
-                                BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                                Button backBtn = (Button) findViewById(R.id.btnback);
-                                backBtn.setOnClickListener(backwardbtnlistener);
-                                Button plusBtn = (Button) findViewById(R.id.btnplus);
-                                plusBtn.setOnClickListener(plusfoodbtnlistener);
-                                Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                                setCenterSpinner(spinner);
-                                for(int i = 0; i < list.categorylist.size(); i++)
-                                    list.categorylist.get(i).onoff = true;
-                                generateBtnList();
-                                generateCheckboxList();
-                                plusBtn.bringToFront();
+                                call_seefood();
                             }
                         });
 
@@ -1219,20 +1167,7 @@ public class MainActivity extends Activity {
                         list.add(spinnerf.getSelectedItem().toString(), editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
                                 spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString(), yy, mm-1, dd);
                         log.dismiss();
-                        setContentView(R.layout.activity_see_food);
-                        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                        Button backBtn = (Button) findViewById(R.id.btnback);
-                        backBtn.setOnClickListener(backwardbtnlistener);
-                        Button plusBtn = (Button) findViewById(R.id.btnplus);
-                        plusBtn.setOnClickListener(plusfoodbtnlistener);
-                        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                        setCenterSpinner(spinner);
-                        for(int i = 0; i < list.categorylist.size(); i++)
-                            list.categorylist.get(i).onoff = true;
-                        generateBtnList();
-                        generateCheckboxList();
-                        plusBtn.bringToFront();
+                        call_seefood();
                     }
                 }
             });
@@ -1330,11 +1265,7 @@ public class MainActivity extends Activity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_fridge:
-                    setContentView(R.layout.activity_toolbar);
-                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                    Button seefoodBtn = (Button)findViewById(R.id.btnfridge);
-                    seefoodBtn.setOnClickListener(seefoodbtnlistener);
+                    call_main();
                     return true;
                 case R.id.navigation_recipe:
                     setContentView(R.layout.fridge);
