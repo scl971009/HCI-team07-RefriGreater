@@ -63,21 +63,52 @@ public class MainActivity extends Activity {
     }
 
     public void call_main(){
-        setContentView(R.layout.activity_toolbar);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
-        seefoodBtn.setOnClickListener(seefoodbtnlistener);
+        Fridgelist list = (Fridgelist) getApplicationContext();
+        switch(list.fridgelist.size()){
+            case 0:
+                setContentView(R.layout.activity_toolbar);
+                BottomNavigationView navigation0 = (BottomNavigationView) findViewById(R.id.navigation);
+                navigation0.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                break;
+            case 1:
+                setContentView(R.layout.activity_toolbar);
+                BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                //Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
+                //seefoodBtn.setOnClickListener(seefoodbtnlistener);
+                generateBtn1();
+                break;
+        }
     }
 
-    private Button.OnClickListener seefoodbtnlistener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Button b = (Button)v;
-            String buttonText = b.getText().toString();
-            call_seefood(buttonText);
-        }
-    };
+    private void generateBtn1(){
+        Fridgelist list = (Fridgelist)getApplicationContext();
+        Button codeBtn = new Button(this);
+        codeBtn.setId(View.generateViewId());
+        codeBtn.setText(list.fridgelist.get(0).name);
+        codeBtn.setBackground(getResources().getDrawable(R.drawable.fridgebotton, null));
+        codeBtn.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL);
+        codeBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+        codeBtn.setPadding(0, 14, 0, 0);
+
+        codeBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button b = (Button)v;
+                String buttonText = b.getText().toString();
+                call_seefood(buttonText);
+            }
+        });
+
+        constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+        constraintLayout.addView(codeBtn);
+        applyConstraintSet.clone(constraintLayout);
+        applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 750);
+        applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 129);
+        applyConstraintSet.constrainHeight(codeBtn.getId(), 192);
+        applyConstraintSet.constrainWidth(codeBtn.getId(), 825);
+        applyConstraintSet.applyTo(constraintLayout);
+    }
 
     public void call_seefood(String fridge){
         Fridgelist list = (Fridgelist) getApplicationContext();
