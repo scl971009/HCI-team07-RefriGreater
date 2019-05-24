@@ -27,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,7 +50,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fridgelist list = (Fridgelist) getApplicationContext();
-        list.add_fridge("家");
+        list.add_fridge("家", "1234567", "宇智波佐助");
+        list.add_id(list.fridgelist.get(0).id, View.generateViewId());
         list.fridgelist.get(0).add( "玉米", 73, "預設", 5, false, "", 2019, 6, 27);
         list.fridgelist.get(0).add("起司", 200, "預設", 1000, true, "", 2019, 11, 1);
         list.fridgelist.get(0).add( "頂級蒲燒鰻", 1, "預設", 0, true, "", 2019, 4, 15);
@@ -64,20 +66,19 @@ public class MainActivity extends Activity {
 
     public void call_main(){
         Fridgelist list = (Fridgelist) getApplicationContext();
+        setContentView(R.layout.activity_toolbar);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         switch(list.fridgelist.size()){
             case 0:
-                setContentView(R.layout.activity_toolbar);
-                BottomNavigationView navigation0 = (BottomNavigationView) findViewById(R.id.navigation);
-                navigation0.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
                 break;
             case 1:
-                setContentView(R.layout.activity_toolbar);
-                BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                //Button seefoodBtn = (Button) findViewById(R.id.btnfridge);
-                //seefoodBtn.setOnClickListener(seefoodbtnlistener);
                 generateBtn1();
+                generateTxt1();
                 break;
+            case 2:
+                generateBtn2();
+                generateTxt2();
         }
     }
 
@@ -108,6 +109,108 @@ public class MainActivity extends Activity {
         applyConstraintSet.constrainHeight(codeBtn.getId(), 192);
         applyConstraintSet.constrainWidth(codeBtn.getId(), 825);
         applyConstraintSet.applyTo(constraintLayout);
+    }
+
+    public void onTargetClick(View view) {
+        Fridgelist list = (Fridgelist)getApplicationContext();
+        switch(list.fridgelist.size()){
+            case 0:
+                break;
+            case 1:
+                TextView text_id = (TextView) findViewById(list.fridgeid.get(0).id_num);
+                ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
+                //ToggleButton toggleButton = (ToggleButton) view;
+                if (togglebutton.isChecked()) {
+                    text_id.setVisibility(View.VISIBLE);
+                } else {
+                    text_id.setVisibility(View.GONE);
+                }
+                break;
+            case 2:
+                TextView text_id_1 = (TextView)findViewById(list.fridgeid.get(0).id_num);
+                TextView text_id_2 = (TextView)findViewById(list.fridgeid.get(1).id_num);
+                ToggleButton toggle2 = (ToggleButton)findViewById(R.id.toggle_button);
+                if(toggle2.isChecked()){
+                    text_id_1.setVisibility(View.VISIBLE);
+                    text_id_2.setVisibility(View.VISIBLE);
+                }
+                else{
+                    text_id_1.setVisibility(View.GONE);
+                    text_id_2.setVisibility(View.GONE);
+                }
+        }
+    }
+
+    private void generateTxt1(){
+        //toggle 要找得到?
+        Fridgelist list = (Fridgelist)getApplicationContext();
+        TextView id = new TextView(MainActivity.this);
+        id.setId(list.fridgeid.get(0).id_num);
+        id.setText("ID: "+list.fridgelist.get(0).id);
+        id.setGravity(Gravity.CENTER);
+        id.setVisibility(View.GONE);
+        id.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+        constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+        constraintLayout.addView(id);
+        applyConstraintSet.clone(constraintLayout);
+        applyConstraintSet.connect(id.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 313, getResources().getDisplayMetrics())));
+        applyConstraintSet.connect(id.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 123, getResources().getDisplayMetrics())));
+        applyConstraintSet.constrainHeight(id.getId(), ConstraintSet.WRAP_CONTENT);
+        applyConstraintSet.constrainWidth(id.getId(), ConstraintSet.WRAP_CONTENT);
+        applyConstraintSet.applyTo(constraintLayout);
+    }
+
+    private void generateBtn2(){
+        Fridgelist list = (Fridgelist)getApplicationContext();
+        for(int i = 0; i < 2; i++){
+            Button codeBtn = new Button(this);
+            codeBtn.setId(View.generateViewId());
+            codeBtn.setText(list.fridgelist.get(i).name);
+            codeBtn.setBackground(getResources().getDrawable(R.drawable.fridgebotton, null));
+            codeBtn.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL);
+            codeBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+            codeBtn.setPadding(0, 14, 0, 0);
+
+            codeBtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Button b = (Button)v;
+                    String buttonText = b.getText().toString();
+                    call_seefood(buttonText);
+                }
+            });
+
+            constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+            constraintLayout.addView(codeBtn);
+            applyConstraintSet.clone(constraintLayout);
+            applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 570+i*333);
+            applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 129);
+            applyConstraintSet.constrainHeight(codeBtn.getId(), 192);
+            applyConstraintSet.constrainWidth(codeBtn.getId(), 825);
+            applyConstraintSet.applyTo(constraintLayout);
+        }
+    }
+
+    private void generateTxt2(){
+        Fridgelist list = (Fridgelist)getApplicationContext();
+        for(int i = 0; i < 2; i++){
+            TextView id = new TextView(MainActivity.this);
+            id.setId(list.fridgeid.get(i).id_num);
+            id.setText("ID: "+list.fridgelist.get(i).id);
+            id.setGravity(Gravity.CENTER);
+            id.setVisibility(View.GONE);
+            id.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+            constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+            constraintLayout.addView(id);
+            applyConstraintSet.clone(constraintLayout);
+            applyConstraintSet.connect(id.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 762+i*333);
+            applyConstraintSet.connect(id.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 123, getResources().getDisplayMetrics())));
+            applyConstraintSet.constrainHeight(id.getId(), ConstraintSet.WRAP_CONTENT);
+            applyConstraintSet.constrainWidth(id.getId(), ConstraintSet.WRAP_CONTENT);
+            applyConstraintSet.applyTo(constraintLayout);
+        }
     }
 
     public void call_seefood(String fridge){
@@ -992,17 +1095,63 @@ public class MainActivity extends Activity {
     }
 
     public void add_fridge(View view){
-        setContentView(R.layout.new_fridge);
-    }
+        final Fridgelist list = (Fridgelist)getApplicationContext();
+        if(list.fridgelist.size() == 2){
+            Toast toast = Toast.makeText(MainActivity.this, "最多只能擁有兩個冰箱", Toast.LENGTH_LONG);
+            toast.show();
+        }
+        else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            final View v = getLayoutInflater().inflate(R.layout.new_fridge, null);
 
-    public void onTargetClick(View view) {
-        TextView text_id = (TextView) findViewById(R.id.textid);
-        ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggle_button);
-        //ToggleButton toggleButton = (ToggleButton) view;
-        if (togglebutton.isChecked()) {
-            text_id.setVisibility(View.VISIBLE);
-        } else {
-            text_id.setVisibility(View.GONE);
+            Button cancel = (Button) v.findViewById(R.id.cancel);
+            Button confirm = (Button) v.findViewById(R.id.confirm);
+            Button question = (Button) v.findViewById(R.id.question);
+
+            dialog.setView(v);
+            final AlertDialog log = dialog.create();
+
+            question.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ImageView setsumei = (ImageView)v.findViewById(R.id.setsumei);
+                    if(setsumei.getVisibility()==View.GONE){
+                        setsumei.setVisibility(View.VISIBLE);
+                        setsumei.bringToFront();
+                    }
+                    else{
+                        setsumei.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            cancel.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    log.dismiss();
+                }
+            });
+
+            confirm.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String id = "3456789";
+                    EditText name = (EditText) v.findViewById(R.id.user_name);
+                    String user_name = name.getText().toString();
+                    EditText fridge = (EditText) v.findViewById(R.id.fridge_name);
+                    String fridge_name = fridge.getText().toString();
+                    list.add_fridge(fridge_name, id, user_name);
+                    list.add_id(list.fridgelist.get(list.fridgelist.size() - 1).id, View.generateViewId());
+                    log.dismiss();
+                    call_main();
+                }
+            });
+
+            log.show();
+            WindowManager.LayoutParams params = log.getWindow().getAttributes();
+            params.height = 850;
+            params.width = 850;
+            log.getWindow().setAttributes(params);
         }
     }
 

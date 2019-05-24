@@ -7,9 +7,23 @@ import java.util.ArrayList;
 public class Fridgelist extends Application {
 
     public ArrayList<Fridge> fridgelist = new ArrayList<>();
+    public ArrayList<HashforFridge> fridgeid = new ArrayList<>();
 
-    public void add_fridge(String name) {
-        fridgelist.add(new Fridge(name));
+    public void add_id(String id, int id_num){
+        fridgeid.add(new HashforFridge(id, id_num));
+    }
+
+    public class HashforFridge{
+        int id_num;
+        String id;
+        public HashforFridge(String id, int id_num){
+            this.id_num = id_num;
+            this.id = id;
+        }
+    }
+
+    public void add_fridge(String name, String id, String user) {
+        fridgelist.add(new Fridge(name, id, user));
     }
 
     public class Fridge {
@@ -17,9 +31,13 @@ public class Fridgelist extends Application {
         public ArrayList<Category> categorylist = new ArrayList<>();
         public ArrayList<IdMapCategory> Map = new ArrayList<>();
         public String name;
+        public String user;
+        public String id;
 
-        public Fridge(String name) {
+        public Fridge(String name, String id, String user) {
             this.name = name;
+            this.id = id;
+            this.user = user;
         }
 
         public void add(String name, int quantity, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
