@@ -1135,15 +1135,29 @@ public class MainActivity extends Activity {
             confirm.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String id = "3456789";
-                    EditText name = (EditText) v.findViewById(R.id.user_name);
-                    String user_name = name.getText().toString();
                     EditText fridge = (EditText) v.findViewById(R.id.fridge_name);
                     String fridge_name = fridge.getText().toString();
-                    list.add_fridge(fridge_name, id, user_name);
-                    list.add_id(list.fridgelist.get(list.fridgelist.size() - 1).id, View.generateViewId());
-                    log.dismiss();
-                    call_main();
+                    EditText name = (EditText) v.findViewById(R.id.user_name);
+                    String user_name = name.getText().toString();
+                    if(fridge_name.length()>3){
+                        Toast toast = Toast.makeText(MainActivity.this, "冰箱名稱最多三個字", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else if(fridge_name.matches("")){
+                        Toast toast = Toast.makeText(MainActivity.this, "請輸入冰箱名稱", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else if(user_name.matches("")){
+                        Toast toast = Toast.makeText(MainActivity.this, "請輸入您的暱稱", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else {
+                        String id = "3456789";
+                        list.add_fridge(fridge_name, id, user_name);
+                        list.add_id(list.fridgelist.get(list.fridgelist.size() - 1).id, View.generateViewId());
+                        log.dismiss();
+                        call_main();
+                    }
                 }
             });
 
@@ -1166,15 +1180,15 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View v) {
             // custom dialog
+            Spinner spinner_out = (Spinner) findViewById(R.id.spinner);
+            String fridge = spinner_out.getSelectedItem().toString();
             AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
             final View view = getLayoutInflater().inflate(R.layout.plus_food, null);
 
             // set the custom dialog components - text, image and button
             final Spinner spinner = (Spinner) view.findViewById(R.id.spinnerfridge);
-            //addsetCenterSpinner(spinner);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, R.layout.spinnerforadd, getResources().getStringArray(R.array.languages));
-            adapter.setDropDownViewResource(R.layout.spinner_down);
-            spinner.setAdapter(adapter);
+            setCenterSpinner(spinner);
+            addsetCenterSpinnerleftup(spinner, fridge);
             final int quant = 0;
             EditText txtValue = (EditText) view.findViewById(R.id.quantity);
             txtValue.setText(format("%d", quant));

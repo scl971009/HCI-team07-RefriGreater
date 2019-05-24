@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="18sp"
-        android:hint="@string/foodnamd"
+        android:hint="@string/fridgenamd"
         android:background="@null"
         android:textCursorDrawable="@drawable/color_cursor"
         android:inputType="text"/>
