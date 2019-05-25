@@ -402,6 +402,7 @@ public class MainActivity extends Activity {
                     if (((Button) v).getTag() instanceof Integer) {
                         index = Integer.parseInt(((Button) v).getTag().toString());
                     }
+                    final Integer temp = index;
                     setContentView(R.layout.activity_see_food);
                     BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
                     navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -411,6 +412,25 @@ public class MainActivity extends Activity {
                     plusBtn.setOnClickListener(plusfoodbtnlistener);
                     Spinner spinner = (Spinner) findViewById(R.id.spinner);
                     setCenterSpinner(spinner);
+                    addsetCenterSpinnerleftup(spinner, fridge);
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            //Toast.makeText(MainActivity.this, "您選擇"+parent.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                            LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
+                            ll.removeAllViews();
+                            regenerateBtnList(temp, parent.getSelectedItem().toString());
+                            LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+                            linear.removeAllViews();
+                            generateCheckboxList(parent.getSelectedItem().toString());
+                            //call_seefood(parent.getSelectedItem().toString());
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
                     regenerateBtnList(index, fridge);
                     generateCheckboxList(fridge);
                     plusBtn.bringToFront();
@@ -554,6 +574,7 @@ public class MainActivity extends Activity {
                         if (((Button) v).getTag() instanceof Integer) {
                             index = Integer.parseInt(((Button) v).getTag().toString());
                         }
+                        final Integer temp = index;
                         setContentView(R.layout.activity_see_food);
                         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
                         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -563,6 +584,25 @@ public class MainActivity extends Activity {
                         plusBtn.setOnClickListener(plusfoodbtnlistener);
                         Spinner spinner = (Spinner) findViewById(R.id.spinner);
                         setCenterSpinner(spinner);
+                        addsetCenterSpinnerleftup(spinner, fridge);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                //Toast.makeText(MainActivity.this, "您選擇"+parent.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                                LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
+                                ll.removeAllViews();
+                                regenerateBtnList(temp, parent.getSelectedItem().toString());
+                                LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+                                linear.removeAllViews();
+                                generateCheckboxList(parent.getSelectedItem().toString());
+                                //call_seefood(parent.getSelectedItem().toString());
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
                         regenerateBtnList(index, fridge);
                         generateCheckboxList(fridge);
                         plusBtn.bringToFront();
@@ -633,6 +673,25 @@ public class MainActivity extends Activity {
                     plusBtn.setOnClickListener(plusfoodbtnlistener);
                     Spinner spinner = (Spinner) findViewById(R.id.spinner);
                     setCenterSpinner(spinner);
+                    addsetCenterSpinnerleftup(spinner, fridge);
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            //Toast.makeText(MainActivity.this, "您選擇"+parent.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                            LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
+                            ll.removeAllViews();
+                            generateBtnList(parent.getSelectedItem().toString());
+                            LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+                            linear.removeAllViews();
+                            generateCheckboxList(parent.getSelectedItem().toString());
+                            //call_seefood(parent.getSelectedItem().toString());
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
                     generateBtnList(fridge);
                     generateCheckboxList(fridge);
                     plusBtn.bringToFront();
@@ -723,15 +782,38 @@ public class MainActivity extends Activity {
                             index = Integer.parseInt(((Button) viewn).getTag().toString());
                         }
                     }
+                    final Integer tempindex = index;
+                    Spinner spinner_out = (Spinner) findViewById(R.id.spinner);
+                    String fridgeout = spinner_out.getSelectedItem().toString();
                     AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
                     final View view = getLayoutInflater().inflate(R.layout.editfood, null);
 
                     // set the custom dialog components - text, image and button
                     final Spinner spinner = (Spinner) view.findViewById(R.id.spinnerfridge);
-                    //addsetCenterSpinner(spinner);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, R.layout.spinnerforadd, getResources().getStringArray(R.array.languages));
-                    adapter.setDropDownViewResource(R.layout.spinner_down);
-                    spinner.setAdapter(adapter);
+                    setCenterSpinner(spinner);
+                    addsetCenterSpinnerleftup(spinner, fridgeout);
+                    final Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnercategory);
+                    addsetCenterSpinner3(spinner2, index, fridge);
+
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if(!parent.getSelectedItem().toString().matches(fridge)){
+                                removeSpinner(spinner2);
+                                addsetCenterSpinner1(spinner2,  parent.getSelectedItem().toString());
+                            }
+                            else{
+                                removeSpinner(spinner2);
+                                addsetCenterSpinner3(spinner2, tempindex, fridge);
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
                     EditText utxtValue = (EditText) view.findViewById(R.id.username);
                     utxtValue.setText(list.fridgelist.get(temp).foodlist.get(index).name);
                     EditText psText = (EditText) view.findViewById(R.id.ps);
@@ -741,8 +823,6 @@ public class MainActivity extends Activity {
                     TextView date = (TextView) view.findViewById(R.id.date);
                     String today = format("%d/%d/%d", list.fridgelist.get(temp).foodlist.get(index).year, list.fridgelist.get(temp).foodlist.get(index).month+1, list.fridgelist.get(temp).foodlist.get(index).day);
                     date.setText(today);
-                    Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnercategory);
-                    addsetCenterSpinner3(spinner2, index, fridge);
                     ToggleButton togglebutton = (ToggleButton) view.findViewById(R.id.toggle_button);
                     togglebutton.setChecked(list.fridgelist.get(temp).foodlist.get(index).pri0pub1);
 
@@ -801,53 +881,65 @@ public class MainActivity extends Activity {
                         public void onClick(View v) {
                             EditText editText = (EditText) view.findViewById(R.id.username);
                             Spinner spinnerc = (Spinner) view.findViewById(R.id.spinnercategory);
-                            if(editText.getText().toString().matches("")){
+                            if (editText.getText().toString().matches("")) {
                                 Toast toast = Toast.makeText(MainActivity.this, "請輸入品項", Toast.LENGTH_LONG);
                                 toast.show();
-                            }
-                            else if(editText.getText().toString().length()>5){
+                            } else if (editText.getText().toString().length() > 5) {
                                 Toast toast = Toast.makeText(MainActivity.this, "品項名稱太長了", Toast.LENGTH_LONG);
                                 toast.show();
-                            }
-                            else{
-                                Fridgelist list = (Fridgelist)getApplicationContext();
+                            } else {
+                                Spinner spinnerf = (Spinner) view.findViewById(R.id.spinnerfridge);
+                                Fridgelist list = (Fridgelist) getApplicationContext();
+                                EditText quan = (EditText) view.findViewById(R.id.quantity);
+                                ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggle_button);
+                                EditText ps = (EditText) view.findViewById(R.id.ps);
+                                TextView date = (TextView) view.findViewById(R.id.date);
                                 Integer temp = 0;
-                                for(int i = 0; i < list.fridgelist.size(); i++){
-                                    if(list.fridgelist.get(i).name.matches(fridge)){
+                                for (int i = 0; i < list.fridgelist.size(); i++) {
+                                    if (list.fridgelist.get(i).name.matches(fridge)) {
                                         temp = i;
                                         break;
                                     }
                                 }
-                                Spinner spinnerf = (Spinner) view.findViewById(R.id.spinnerfridge);
-                                EditText quan = (EditText)view.findViewById(R.id.quantity);
-                                ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggle_button);
-                                EditText ps = (EditText)view.findViewById(R.id.ps);
-                                TextView date = (TextView)view.findViewById(R.id.date);
                                 String line = (String) date.getText();
                                 String[] split_line = line.split("/");
                                 int yy = Integer.valueOf(split_line[0]);
                                 int mm = Integer.valueOf(split_line[1]);
-                                int dd =Integer.valueOf(split_line[2]);
+                                int dd = Integer.valueOf(split_line[2]);
                                 DateFormat df = new SimpleDateFormat("yyyy/M/dd");
                                 Calendar c = Calendar.getInstance();
                                 int ny = c.get(Calendar.YEAR);
                                 int nm = c.get(Calendar.MONTH);
                                 int nd = c.get(Calendar.DAY_OF_MONTH);
-                                String now = format("%d/%d/%d", ny, (nm+1), nd);
+                                String now = format("%d/%d/%d", ny, (nm + 1), nd);
                                 long days = 0;
                                 try {
                                     Date d1 = df.parse(line);
                                     Date d2 = df.parse(now);
                                     long diff = d1.getTime() - d2.getTime();
                                     days = diff / (1000 * 60 * 60 * 24);
-                                }
-                                catch(ParseException e){
+                                } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                list.fridgelist.get(temp).change(indexinside, editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
-                                        spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString(), yy, mm-1, dd);
-                                log.dismiss();
-                                call_seefood(fridge);
+                                if (spinnerf.getSelectedItem().toString().matches(fridge)) {
+                                    list.fridgelist.get(temp).change(indexinside, editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
+                                            spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd);
+                                    log.dismiss();
+                                    call_seefood(fridge);
+                                }
+                                else{
+                                    list.fridgelist.get(temp).delete(indexinside);
+                                    for (int i = 0; i < list.fridgelist.size(); i++) {
+                                        if (list.fridgelist.get(i).name.matches(spinnerf.getSelectedItem().toString())) {
+                                            temp = i;
+                                            break;
+                                        }
+                                    }
+                                    list.fridgelist.get(temp).add(editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
+                                            spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd);
+                                    log.dismiss();
+                                    call_seefood(spinnerf.getSelectedItem().toString());
+                                }
                             }
                         }
                     });
