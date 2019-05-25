@@ -738,18 +738,7 @@ public class MainActivity extends Activity {
                             }
                             list.fridgelist.get(temp).delete(index);
                             loginside.dismiss();
-                            setContentView(R.layout.activity_see_food);
-                            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                            Button backBtn = (Button) findViewById(R.id.btnback);
-                            backBtn.setOnClickListener(backwardbtnlistener);
-                            Button plusBtn = (Button) findViewById(R.id.btnplus);
-                            plusBtn.setOnClickListener(plusfoodbtnlistener);
-                            Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                            setCenterSpinner(spinner);
-                            generateBtnList(fridge);
-                            generateCheckboxList(fridge);
-                            plusBtn.bringToFront();
+                            call_seefood(fridge);
                         }
                     });
                     loginside.show();
@@ -924,8 +913,6 @@ public class MainActivity extends Activity {
                                 if (spinnerf.getSelectedItem().toString().matches(fridge)) {
                                     list.fridgelist.get(temp).change(indexinside, editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
                                             spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd);
-                                    log.dismiss();
-                                    call_seefood(fridge);
                                 }
                                 else{
                                     list.fridgelist.get(temp).delete(indexinside);
@@ -937,9 +924,9 @@ public class MainActivity extends Activity {
                                     }
                                     list.fridgelist.get(temp).add(editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
                                             spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd);
-                                    log.dismiss();
-                                    call_seefood(spinnerf.getSelectedItem().toString());
                                 }
+                                log.dismiss();
+                                call_seefood(fridge);
                             }
                         }
                     });
