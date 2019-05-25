@@ -68,14 +68,15 @@
 
     <Button
         android:id="@+id/btnmem"
-        android:layout_width="84.21px"
-        android:layout_height="72px"
-        android:layout_marginStart="936px"
-        android:layout_marginTop="125px"
+        android:layout_width="96px"
+        android:layout_height="96px"
+        android:layout_marginStart="927px"
+        android:layout_marginTop="117px"
         android:background="@drawable/shareee"
         android:gravity="center"
         android:src="@drawable/shareee"
         android:text=""
+        android:onClick="mem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

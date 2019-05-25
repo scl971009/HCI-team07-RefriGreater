@@ -988,18 +988,32 @@ public class MainActivity extends Activity {
                 pae.setMargins(0, 0, 0, 0);
                 edit.setLayoutParams(pae);
             }
-            //delete.bringToFront();
             linear.addView(contain);
         }
-        /*constraintLayout.addView(codeBtn);
-        applyConstraintSet.clone(constraintLayout);
-        applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 528 + 132 * index);
-        applyConstraintSet.connect(codeBtn.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 60);
-        applyConstraintSet.constrainHeight(codeBtn.getId(), 132);
-        applyConstraintSet.constrainWidth(codeBtn.getId(), ConstraintSet.WRAP_CONTENT);
-        applyConstraintSet.applyTo(constraintLayout);*/
     }
 
+    public void mem(View view){
+        Spinner spinner = findViewById(R.id.spinner);
+        String fridge = spinner.getSelectedItem().toString();
+        setContentView(R.layout.fridgemem);
+        TextView fridge_name = new TextView(MainActivity.this);
+        fridge_name.setId(View.generateViewId());
+        fridge_name.setText(fridge);
+        fridge_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        fridge_name.setGravity(Gravity.CENTER);
+        constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+        constraintLayout.addView(fridge_name);
+        applyConstraintSet.clone(constraintLayout);
+        applyConstraintSet.connect(fridge_name.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 279);
+        applyConstraintSet.connect(fridge_name.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 165);
+        applyConstraintSet.constrainHeight(fridge_name.getId(), 72);
+        applyConstraintSet.constrainWidth(fridge_name.getId(), 270);
+        applyConstraintSet.applyTo(constraintLayout);
+    }
+
+    public void back(View view){
+        call_seefood("家");
+    }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 

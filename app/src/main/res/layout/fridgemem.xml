@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="360px"
+        android:layout_height="120px"
+        android:text="@string/member"
+        android:textSize="30sp"
+        android:layout_marginTop="95px"
+        android:layout_marginStart="360px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/btnback"
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:layout_marginStart="60px"
+        android:layout_marginTop="125px"
+        android:background="@drawable/backward"
+        android:gravity="center"
+        android:src="@drawable/backward"
+        android:text=""
+        android:onClick="back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+    <ImageView
+        android:id="@+id/fridgeicon"
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:src="@drawable/memfridge"
+        android:layout_marginTop="279px"
+        android:layout_marginStart="87px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
