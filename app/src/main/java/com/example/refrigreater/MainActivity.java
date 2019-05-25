@@ -1223,7 +1223,7 @@ public class MainActivity extends Activity {
             SimpleDateFormat df = new SimpleDateFormat(dateformat);
             String today = df.format(mCal.getTime());
             date.setText(today);
-            Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnercategory);
+            final Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnercategory);
             addsetCenterSpinner2(spinner2, spinner.getSelectedItem().toString());
             ToggleButton togglebutton = (ToggleButton) view.findViewById(R.id.toggle_button);
             togglebutton.setChecked(false);
@@ -1274,6 +1274,19 @@ public class MainActivity extends Activity {
 
             dialog.setView(view);
             final AlertDialog log = dialog.create();
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    removeSpinner(spinner2);
+                    addsetCenterSpinner2(spinner2, parent.getSelectedItem().toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             spinner2.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView parent, View v, int position, long id) {
@@ -1573,6 +1586,13 @@ public class MainActivity extends Activity {
             adapter.add(list.fridgelist.get(temp).categorylist.get(i).category);
         }
         spinner1.setAdapter(adapter);
+    }
+
+    private void removeSpinner(Spinner spinner){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                MainActivity.this,R.layout.spinnerforadd);
+        adapter.setDropDownViewResource(R.layout.spinner_down);
+        spinner.setAdapter(adapter);
     }
 
     private void addsetCenterSpinner1(Spinner spinner1, String fridge){
