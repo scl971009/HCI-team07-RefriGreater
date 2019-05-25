@@ -225,6 +225,24 @@ public class MainActivity extends Activity {
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         setCenterSpinner(spinner);
         addsetCenterSpinnerleftup(spinner, fridge);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(MainActivity.this, "您選擇"+parent.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
+                ll.removeAllViews();
+                generateBtnList(parent.getSelectedItem().toString());
+                LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+                linear.removeAllViews();
+                generateCheckboxList(parent.getSelectedItem().toString());
+                //call_seefood(parent.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         Integer index = 0;
         for(int i = 0; i < list.fridgelist.size(); i++){
             if(list.fridgelist.get(i).name.matches(fridge)) {
@@ -1086,7 +1104,8 @@ public class MainActivity extends Activity {
                 }
                 LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
                 ll.removeAllViews();
-                generateBtnList(fridge);
+                Spinner spinner = (Spinner)findViewById(R.id.spinner);
+                generateBtnList(spinner.getSelectedItem().toString());
             }
         });
 
@@ -1155,6 +1174,12 @@ public class MainActivity extends Activity {
                         String id = "3456789";
                         list.add_fridge(fridge_name, id, user_name);
                         list.add_id(list.fridgelist.get(list.fridgelist.size() - 1).id, View.generateViewId());
+                        list.fridgelist.get(list.fridgelist.size() - 1).addcategory("預設", 1, true);
+                        list.fridgelist.get(list.fridgelist.size() - 1).addcategory("更改預設", -1, true);
+                        list.fridgelist.get(list.fridgelist.size() - 1).addcategory("新增類別", -1, true);
+                        list.fridgelist.get(list.fridgelist.size() - 1).addcategory("刪除類別", -1, true);
+                        list.fridgelist.get(list.fridgelist.size() - 1).addMap("全選", View.generateViewId());
+                        list.fridgelist.get(list.fridgelist.size() - 1).addMap("預設", View.generateViewId());
                         log.dismiss();
                         call_main();
                     }
