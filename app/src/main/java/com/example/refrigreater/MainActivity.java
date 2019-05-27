@@ -52,9 +52,9 @@ public class MainActivity extends Activity {
         Fridgelist list = (Fridgelist) getApplicationContext();
         list.add_fridge("家", "1234567", "宇智波佐助");
         list.add_id(list.fridgelist.get(0).id, View.generateViewId());
-        list.fridgelist.get(0).add( "玉米", "預設", 5, false, "", 2019, 5, 1);
-        list.fridgelist.get(0).add("起司", "預設", 1000, true, "", 2022, 1, 20);
-        list.fridgelist.get(0).add( "頂級蒲燒鰻", "預設", 0, true, "", 2019, 4, 27);
+        list.fridgelist.get(0).add( "玉米", "預設", 5, false, "", 2019, 5, 2);
+        list.fridgelist.get(0).add("起司", "預設", 1000, true, "", 2022, 1, 21);
+        list.fridgelist.get(0).add( "頂級蒲燒鰻", "預設", 0, true, "", 2019, 4, 28);
         list.fridgelist.get(0).addcategory("預設", 1, true);
         list.fridgelist.get(0).addcategory("更改預設", -1, true);
         list.fridgelist.get(0).addcategory("新增類別", -1, true);
@@ -1283,7 +1283,84 @@ public class MainActivity extends Activity {
             toast.show();
         }
         else{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            final View v = getLayoutInflater().inflate(R.layout.joinfridge, null);
 
+            Button cancel = (Button) v.findViewById(R.id.cancel);
+            Button confirm = (Button) v.findViewById(R.id.confirm);
+            Button question = (Button) v.findViewById(R.id.question);
+
+            dialog.setView(v);
+            final AlertDialog log = dialog.create();
+
+            question.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ImageView setsumei = (ImageView)v.findViewById(R.id.setsumei);
+                    if(setsumei.getVisibility()==View.GONE){
+                        setsumei.setVisibility(View.VISIBLE);
+                        setsumei.bringToFront();
+                    }
+                    else{
+                        setsumei.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            cancel.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    log.dismiss();
+                }
+            });
+
+            confirm.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditText code = (EditText) v.findViewById(R.id.shiriaru);
+                    String shiriaru = code.getText().toString();
+                    EditText fridge = (EditText) v.findViewById(R.id.fridge_name);
+                    String fridge_name = fridge.getText().toString();
+                    EditText name = (EditText) v.findViewById(R.id.user_name);
+                    String user_name = name.getText().toString();
+                    if(fridge_name.length()>3){
+                        Toast toast = Toast.makeText(MainActivity.this, "冰箱名稱最多三個字", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else if(fridge_name.matches("")){
+                        Toast toast = Toast.makeText(MainActivity.this, "請輸入冰箱名稱", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else if(user_name.matches("")){
+                        Toast toast = Toast.makeText(MainActivity.this, "請輸入您的暱稱", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else if(!shiriaru.matches("c876387")){
+                        Toast toast = Toast.makeText(MainActivity.this, "查無此冰箱", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else {
+                        String id = "c876387";
+                        list.add_fridge(fridge_name, id, user_name);
+                        list.add_id(list.fridgelist.get(list.fridgelist.size() - 1).id, View.generateViewId());
+                        list.fridgelist.get(list.fridgelist.size() - 1).addcategory("預設", 1, true);
+                        list.fridgelist.get(list.fridgelist.size() - 1).addcategory("更改預設", -1, true);
+                        list.fridgelist.get(list.fridgelist.size() - 1).addcategory("新增類別", -1, true);
+                        list.fridgelist.get(list.fridgelist.size() - 1).addcategory("刪除類別", -1, true);
+                        list.fridgelist.get(list.fridgelist.size() - 1).addMap("全選", View.generateViewId());
+                        list.fridgelist.get(list.fridgelist.size() - 1).addMap("預設", View.generateViewId());
+                        list.fridgelist.get(list.fridgelist.size() - 1).add("星爆氣流斬", "預設", 87, true, "", 2019, 7, 23);
+                        log.dismiss();
+                        call_main();
+                    }
+                }
+            });
+
+            log.show();
+            WindowManager.LayoutParams params = log.getWindow().getAttributes();
+            params.height = 850;
+            params.width = 850;
+            log.getWindow().setAttributes(params);
         }
     }
 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="850px"
+    android:layout_height="850px"
+    android:background="@drawable/joinfridge">
+
+    <EditText
+        android:id="@+id/shiriaru"
+        android:layout_width="290px"
+        android:layout_height="96px"
+        android:layout_marginStart="375px"
+        android:layout_marginTop="190px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="18sp"
+        android:background="@null"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/fridge_name"
+        android:layout_width="290px"
+        android:layout_height="96px"
+        android:layout_marginStart="375px"
+        android:layout_marginTop="300px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="18sp"
+        android:hint="@string/fridgenamd"
+        android:background="@null"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/user_name"
+        android:layout_width="290px"
+        android:layout_height="96px"
+        android:layout_marginStart="375px"
+        android:layout_marginTop="410px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="18sp"
+        android:background="@null"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/question"
+        android:layout_width="54px"
+        android:layout_height="54px"
+        android:layout_marginStart="615px"
+        android:layout_marginTop="90px"
+        android:background="@drawable/hatena"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="240px"
+        android:layout_height="96px"
+        android:layout_marginStart="75px"
+        android:layout_marginTop="582px"
+        android:background="@drawable/cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="240px"
+        android:layout_height="96px"
+        android:layout_marginStart="435px"
+        android:layout_marginTop="582px"
+        android:background="@drawable/confirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/setsumei"
+        android:layout_width="597px"
+        android:layout_height="360px"
+        android:background="@drawable/join_setsumei"
+        android:layout_marginStart="75px"
+        android:layout_marginTop="171px"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:layout_width="240px"
+        android:layout_height="100px"
+        android:layout_marginStart="435px"
+        android:layout_marginTop="750px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
