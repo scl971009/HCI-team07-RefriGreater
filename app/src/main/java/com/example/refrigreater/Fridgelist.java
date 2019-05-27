@@ -40,17 +40,16 @@ public class Fridgelist extends Application {
             this.user = user;
         }
 
-        public void add(String name, int quantity, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
-            foodlist.add(new Food(name, quantity, category, expire, pri0pub1, ps, year, month, day));
+        public void add(String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
+            foodlist.add(new Food(name, category, expire, pri0pub1, ps, year, month, day));
         }
 
         public void delete(int i) {
             foodlist.remove(foodlist.get(i));
         }
 
-        public void change(int index, String name, int quantity, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
+        public void change(int index, String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
             foodlist.get(index).name = name;
-            foodlist.get(index).quantity = quantity;
             foodlist.get(index).category = category;
             foodlist.get(index).expire = expire;
             foodlist.get(index).pri0pub1 = pri0pub1;
@@ -63,7 +62,6 @@ public class Fridgelist extends Application {
         public class Food {
             public String name;
             public String category;
-            public int quantity;
             public int expire;
             public boolean pri0pub1;
             public String ps;
@@ -71,9 +69,8 @@ public class Fridgelist extends Application {
             public int month;
             public int day;
 
-            public Food(String name, int quantity, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
+            public Food(String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
                 this.name = name;
-                this.quantity = quantity;
                 this.category = category;
                 this.expire = expire;
                 this.pri0pub1 = pri0pub1;

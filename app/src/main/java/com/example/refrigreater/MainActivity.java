@@ -52,9 +52,9 @@ public class MainActivity extends Activity {
         Fridgelist list = (Fridgelist) getApplicationContext();
         list.add_fridge("家", "1234567", "宇智波佐助");
         list.add_id(list.fridgelist.get(0).id, View.generateViewId());
-        list.fridgelist.get(0).add( "玉米", 73, "預設", 5, false, "", 2019, 6, 27);
-        list.fridgelist.get(0).add("起司", 200, "預設", 1000, true, "", 2019, 11, 1);
-        list.fridgelist.get(0).add( "頂級蒲燒鰻", 1, "預設", 0, true, "", 2019, 4, 15);
+        list.fridgelist.get(0).add( "玉米", "預設", 5, false, "", 2019, 5, 1);
+        list.fridgelist.get(0).add("起司", "預設", 1000, true, "", 2022, 1, 20);
+        list.fridgelist.get(0).add( "頂級蒲燒鰻", "預設", 0, true, "", 2019, 4, 27);
         list.fridgelist.get(0).addcategory("預設", 1, true);
         list.fridgelist.get(0).addcategory("更改預設", -1, true);
         list.fridgelist.get(0).addcategory("新增類別", -1, true);
@@ -257,6 +257,28 @@ public class MainActivity extends Activity {
         plusBtn.bringToFront();
     }
 
+    private void addsetCenterSpinner4(Spinner spinner, String fridge){
+        Fridgelist list = (Fridgelist)getApplicationContext();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                MainActivity.this,R.layout.spinnerforadd);
+        adapter.setDropDownViewResource(R.layout.spinner_down);
+        Integer index = 0;
+        for(int i = 0; i < list.fridgelist.size(); i++){
+            if(list.fridgelist.get(i).name.matches(fridge)){
+                index = i;
+                break;
+            }
+        }
+        //adapter.add(String.format("%b", list.fridgelist.get(0).name.matches(fridge)));
+        adapter.add(list.fridgelist.get(index).name);
+        for(int i = 0; i < list.fridgelist.size(); i++){
+            if(!list.fridgelist.get(i).name.matches(fridge)){
+                adapter.add(list.fridgelist.get(i).name);
+            }
+        }
+        spinner.setAdapter(adapter);
+    }
+
     private void addsetCenterSpinnerleftup(Spinner spinner, String fridge){
         Fridgelist list = (Fridgelist)getApplicationContext();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -331,26 +353,7 @@ public class MainActivity extends Activity {
             text += "　";
         }
         //text += String.format("%4d\t%6d\t%s", btnContentList.quantity, btnContentList.expire, "天");
-        if (list.quantity > 999) {
-            text += list.quantity;
-        } else if (list.quantity > 99) {
-            text += " ";
-            text += list.quantity;
-        } else if (list.quantity > 9) {
-            text += "  ";
-            text += list.quantity;
-        } else if (list.quantity > -1) {
-            text += "   ";
-            text += list.quantity;
-        } else if (list.quantity > -10) {
-            text += "  ";
-            text += list.quantity;
-        } else if (list.quantity > -100) {
-            text += " ";
-            text += list.quantity;
-        } else {
-            text += list.quantity;
-        }
+        text += "    ";
         //text+="　";
         if (list.expire > 9999) {
             text += list.expire;
@@ -504,26 +507,7 @@ public class MainActivity extends Activity {
                 text += "　";
             }
             //text += String.format("%4d\t%6d\t%s", btnContentList.quantity, btnContentList.expire, "天");
-            if (list.quantity > 999) {
-                text += list.quantity;
-            } else if (list.quantity > 99) {
-                text += " ";
-                text += list.quantity;
-            } else if (list.quantity > 9) {
-                text += "  ";
-                text += list.quantity;
-            } else if (list.quantity > -1) {
-                text += "   ";
-                text += list.quantity;
-            } else if (list.quantity > -10) {
-                text += "  ";
-                text += list.quantity;
-            } else if (list.quantity > -100) {
-                text += " ";
-                text += list.quantity;
-            } else {
-                text += list.quantity;
-            }
+            text += "    ";
             //text+="　";
             if (list.expire > 9999) {
                 text += list.expire;
@@ -780,7 +764,7 @@ public class MainActivity extends Activity {
                     // set the custom dialog components - text, image and button
                     final Spinner spinner = (Spinner) view.findViewById(R.id.spinnerfridge);
                     setCenterSpinner(spinner);
-                    addsetCenterSpinnerleftup(spinner, fridgeout);
+                    addsetCenterSpinner4(spinner, fridgeout);
                     final Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnercategory);
                     addsetCenterSpinner3(spinner2, index, fridge);
 
@@ -807,34 +791,16 @@ public class MainActivity extends Activity {
                     utxtValue.setText(list.fridgelist.get(temp).foodlist.get(index).name);
                     EditText psText = (EditText) view.findViewById(R.id.ps);
                     psText.setText(list.fridgelist.get(temp).foodlist.get(index).ps);
-                    EditText txtValue = (EditText) view.findViewById(R.id.quantity);
-                    txtValue.setText(format("%d", list.fridgelist.get(temp).foodlist.get(index).quantity));
                     TextView date = (TextView) view.findViewById(R.id.date);
                     String today = format("%d/%d/%d", list.fridgelist.get(temp).foodlist.get(index).year, list.fridgelist.get(temp).foodlist.get(index).month+1, list.fridgelist.get(temp).foodlist.get(index).day);
                     date.setText(today);
+                    TextView dayleft = (TextView)view.findViewById(R.id.until);
+                    dayleft.setText("("+list.fridgelist.get(temp).foodlist.get(index).expire+"天後)");
                     ToggleButton togglebutton = (ToggleButton) view.findViewById(R.id.toggle_button);
                     togglebutton.setChecked(list.fridgelist.get(temp).foodlist.get(index).pri0pub1);
 
-                    Button dialogButton = (Button) view.findViewById(R.id.btnminus);
                     // if button is clicked, close the custom dialog
-                    dialogButton.setOnClickListener(new OnClickListener() {
-                        public void onClick(View v) {
-                            EditText text = (EditText) view.findViewById(R.id.quantity);
-                            int num = Integer.valueOf((String) text.getText().toString());
-                            num--;
-                            text.setText(Integer.toString(num));
-                        }
-                    });
-                    Button plusbtn = (Button) view.findViewById((R.id.btnplus));
-                    plusbtn.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            EditText text = (EditText) view.findViewById(R.id.quantity);
-                            int num = Integer.valueOf((String) text.getText().toString());
-                            num++;
-                            text.setText(format("%d", num));
-                        }
-                    });
+
                     final int indexinside = index;
                     //calendar
                     Button canlendarbtn = (Button)view.findViewById(R.id.btncalendar);
@@ -846,6 +812,26 @@ public class MainActivity extends Activity {
                                 public void onDateSet(DatePicker vi, int year, int month, int dayOfMonth) {
                                     TextView txt = (TextView)view.findViewById(R.id.date);
                                     txt.setText(format("%d/%d/%d",year,  month+1, dayOfMonth));
+                                    String line = (String) txt.getText();
+                                    String[] split_line = line.split("/");
+                                    DateFormat df = new SimpleDateFormat("yyyy/M/dd");
+                                    Calendar c = Calendar.getInstance();
+                                    int ny = c.get(Calendar.YEAR);
+                                    int nm = c.get(Calendar.MONTH);
+                                    int nd = c.get(Calendar.DAY_OF_MONTH);
+                                    String now = format("%d/%d/%d", ny, (nm+1), nd);
+                                    long days = 0;
+                                    try {
+                                        Date d1 = df.parse(line);
+                                        Date d2 = df.parse(now);
+                                        long diff = d1.getTime() - d2.getTime();
+                                        days = diff / (1000 * 60 * 60 * 24);
+                                    }
+                                    catch(ParseException e){
+                                        e.printStackTrace();
+                                    }
+                                    TextView daysleft = (TextView)view.findViewById(R.id.until);
+                                    daysleft.setText("("+days+"天後)");
                                 }
                             }, list.fridgelist.get(inside).foodlist.get(indexinside).year, list.fridgelist.get(inside).foodlist.get(indexinside).month, list.fridgelist.get(inside).foodlist.get(indexinside).day);
                             dpd.show();
@@ -879,7 +865,6 @@ public class MainActivity extends Activity {
                             } else {
                                 Spinner spinnerf = (Spinner) view.findViewById(R.id.spinnerfridge);
                                 Fridgelist list = (Fridgelist) getApplicationContext();
-                                EditText quan = (EditText) view.findViewById(R.id.quantity);
                                 ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggle_button);
                                 EditText ps = (EditText) view.findViewById(R.id.ps);
                                 TextView date = (TextView) view.findViewById(R.id.date);
@@ -911,7 +896,7 @@ public class MainActivity extends Activity {
                                     e.printStackTrace();
                                 }
                                 if (spinnerf.getSelectedItem().toString().matches(fridge)) {
-                                    list.fridgelist.get(temp).change(indexinside, editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
+                                    list.fridgelist.get(temp).change(indexinside, editText.getText().toString(),
                                             spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd);
                                 }
                                 else{
@@ -922,7 +907,7 @@ public class MainActivity extends Activity {
                                             break;
                                         }
                                     }
-                                    list.fridgelist.get(temp).add(editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
+                                    list.fridgelist.get(temp).add(editText.getText().toString(),
                                             spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd);
                                 }
                                 log.dismiss();
@@ -994,7 +979,7 @@ public class MainActivity extends Activity {
 
     public void mem(View view){
         Spinner spinner = findViewById(R.id.spinner);
-        String fridge = spinner.getSelectedItem().toString();
+        final String fridge = spinner.getSelectedItem().toString();
         setContentView(R.layout.fridgemem);
         TextView fridge_name = new TextView(MainActivity.this);
         fridge_name.setId(View.generateViewId());
@@ -1009,10 +994,14 @@ public class MainActivity extends Activity {
         applyConstraintSet.constrainHeight(fridge_name.getId(), 72);
         applyConstraintSet.constrainWidth(fridge_name.getId(), 270);
         applyConstraintSet.applyTo(constraintLayout);
-    }
 
-    public void back(View view){
-        call_seefood("家");
+        Button back = (Button)findViewById(R.id.btnback);
+        back.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                call_seefood(fridge);
+            }
+        });
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -1287,6 +1276,17 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void join_fridge(View view){
+        final Fridgelist list = (Fridgelist)getApplicationContext();
+        if(list.fridgelist.size() == 2){
+            Toast toast = Toast.makeText(MainActivity.this, "最多只能擁有兩個冰箱", Toast.LENGTH_LONG);
+            toast.show();
+        }
+        else{
+
+        }
+    }
+
     private Button.OnClickListener backwardbtnlistener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -1306,41 +1306,19 @@ public class MainActivity extends Activity {
             // set the custom dialog components - text, image and button
             final Spinner spinner = (Spinner) view.findViewById(R.id.spinnerfridge);
             setCenterSpinner(spinner);
-            addsetCenterSpinnerleftup(spinner, fridge);
-            final int quant = 0;
-            EditText txtValue = (EditText) view.findViewById(R.id.quantity);
-            txtValue.setText(format("%d", quant));
+            addsetCenterSpinner4(spinner, fridge);
             TextView date = (TextView) view.findViewById(R.id.date);
             Calendar mCal = Calendar.getInstance();
             String dateformat = "yyyy/M/dd";
             SimpleDateFormat df = new SimpleDateFormat(dateformat);
             String today = df.format(mCal.getTime());
             date.setText(today);
+            TextView dayleft = (TextView)view.findViewById(R.id.until);
+            dayleft.setText("(0天後)");
             final Spinner spinner2 = (Spinner) view.findViewById(R.id.spinnercategory);
             addsetCenterSpinner2(spinner2, spinner.getSelectedItem().toString());
             ToggleButton togglebutton = (ToggleButton) view.findViewById(R.id.toggle_button);
             togglebutton.setChecked(false);
-
-            Button dialogButton = (Button) view.findViewById(R.id.btnminus);
-            // if button is clicked, close the custom dialog
-            dialogButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    EditText text = (EditText) view.findViewById(R.id.quantity);
-                    int num = Integer.valueOf((String) text.getText().toString());
-                    num--;
-                    text.setText(Integer.toString(num));
-                }
-            });
-            Button plusbtn = (Button) view.findViewById((R.id.btnplus));
-            plusbtn.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText text = (EditText) view.findViewById(R.id.quantity);
-                    int num = Integer.valueOf((String) text.getText().toString());
-                    num++;
-                    text.setText(format("%d", num));
-                }
-            });
 
             //calendar
             Button canlendarbtn = (Button)view.findViewById(R.id.btncalendar);
@@ -1356,6 +1334,26 @@ public class MainActivity extends Activity {
                         public void onDateSet(DatePicker vi, int year, int month, int dayOfMonth) {
                             TextView txt = (TextView)view.findViewById(R.id.date);
                             txt.setText(format("%d/%d/%d",year,  month+1, dayOfMonth));
+                            String line = (String) txt.getText();
+                            String[] split_line = line.split("/");
+                            DateFormat df = new SimpleDateFormat("yyyy/M/dd");
+                            Calendar c = Calendar.getInstance();
+                            int ny = c.get(Calendar.YEAR);
+                            int nm = c.get(Calendar.MONTH);
+                            int nd = c.get(Calendar.DAY_OF_MONTH);
+                            String now = format("%d/%d/%d", ny, (nm+1), nd);
+                            long days = 0;
+                            try {
+                                Date d1 = df.parse(line);
+                                Date d2 = df.parse(now);
+                                long diff = d1.getTime() - d2.getTime();
+                                days = diff / (1000 * 60 * 60 * 24);
+                            }
+                            catch(ParseException e){
+                                e.printStackTrace();
+                            }
+                            TextView daysleft = (TextView)view.findViewById(R.id.until);
+                            daysleft.setText("("+days+"天後)");
                         }
                     }, year, month, day);
                     dpd.show();
@@ -1586,7 +1584,6 @@ public class MainActivity extends Activity {
                                 break;
                             }
                         }
-                        EditText quan = (EditText)view.findViewById(R.id.quantity);
                         ToggleButton toggle = (ToggleButton) view.findViewById(R.id.toggle_button);
                         EditText ps = (EditText)view.findViewById(R.id.ps);
                         TextView date = (TextView)view.findViewById(R.id.date);
@@ -1611,7 +1608,7 @@ public class MainActivity extends Activity {
                         catch(ParseException e){
                             e.printStackTrace();
                         }
-                        list.fridgelist.get(temp).add(editText.getText().toString(), Integer.valueOf(quan.getText().toString()),
+                        list.fridgelist.get(temp).add(editText.getText().toString(),
                                 spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString(), yy, mm-1, dd);
                         log.dismiss();
                         call_seefood(spinnerf.getSelectedItem().toString());
