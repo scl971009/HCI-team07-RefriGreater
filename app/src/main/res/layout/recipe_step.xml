@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/windowBackground"
+        app:itemBackground="@color/toolbar"
+        app:itemIconTint="@android:color/black"
+        app:itemTextColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
+
+    <Button
+        android:id="@+id/btnback"
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:layout_marginStart="60px"
+        android:layout_marginTop="125px"
+        android:background="@drawable/backward"
+        android:gravity="center"
+        android:src="@drawable/backward"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/star"
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:layout_marginTop="125px"
+        android:layout_marginStart="604.5px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:layout_width="870px"
+        android:layout_height="276px"
+        android:src="@drawable/step_title"
+        android:layout_marginTop="90px"
+        android:layout_marginStart="125px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ScrollView
+        android:layout_width="972px"
+        android:layout_height="1110.15px"
+        android:layout_marginTop="390px"
+        android:layout_marginStart="54px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:id="@+id/mylinear" >
+
+            <ImageView
+                android:layout_width="972px"
+                android:layout_height="270px"
+                android:src="@drawable/step1"/>
+
+            <ImageView
+                android:layout_width="972px"
+                android:layout_height="270px"
+                android:layout_marginTop="42px"
+                android:src="@drawable/step2"/>
+
+            <ImageView
+                android:layout_width="972px"
+                android:layout_height="270px"
+                android:layout_marginTop="42px"
+                android:src="@drawable/step3"/>
+
+            <ImageView
+                android:layout_width="972px"
+                android:layout_height="270px"
+                android:layout_marginTop="42px"
+                android:src="@drawable/step4"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ToggleButton
+        android:id="@+id/switchiands"
+        android:textOff=""
+        android:textOn=""
+        android:background="@drawable/recipe_toggle_selector"
+        android:layout_width="105px"
+        android:layout_height="63px"
+        android:layout_marginTop="290px"
+        android:layout_marginStart="273px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

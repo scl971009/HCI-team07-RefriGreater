@@ -6,6 +6,17 @@ import java.util.ArrayList;
 
 public class Fridgelist extends Application {
 
+    boolean shake = true;
+
+    public void change_shake(){
+        if(shake){
+            shake = false;
+        }
+        else{
+            shake = true;
+        }
+    }
+
     public ArrayList<Fridge> fridgelist = new ArrayList<>();
     public ArrayList<HashforFridge> fridgeid = new ArrayList<>();
 

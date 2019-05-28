@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
         list.add_id(list.fridgelist.get(0).id, View.generateViewId());
         list.fridgelist.get(0).add( "玉米", "預設", 5, false, "", 2019, 5, 2);
         list.fridgelist.get(0).add("起司", "預設", 1000, true, "", 2022, 1, 21);
-        list.fridgelist.get(0).add( "頂級蒲燒鰻", "預設", 0, true, "", 2019, 4, 28);
+        list.fridgelist.get(0).add( "芒果", "預設", 0, true, "", 2019, 4, 28);
         list.fridgelist.get(0).addcategory("預設", 1, true);
         list.fridgelist.get(0).addcategory("更改預設", -1, true);
         list.fridgelist.get(0).addcategory("新增類別", -1, true);
@@ -492,7 +492,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void resetBtnAttribute(Button codeBtn, Fridgelist.Fridge.Food list, int index, int hash, int special, final String fridge) {
+    private void resetBtnAttribute(Button codeBtn, Fridgelist.Fridge.Food list, int index, int hash, final int special, final String fridge) {
         if(hash != special) {
             codeBtn.setId(View.generateViewId());
             if (list.expire < 3) {
@@ -733,6 +733,14 @@ public class MainActivity extends Activity {
                 }
             });
             recipe.setGravity(Gravity.CENTER_VERTICAL);
+
+            recipe.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    call_recipe_search();
+                }
+            });
+
             edit.setGravity(Gravity.CENTER_VERTICAL);
 
             edit.setTag(hash);
@@ -1000,6 +1008,130 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 call_seefood(fridge);
+            }
+        });
+    }
+
+    public void call_recipe_search(){
+        Fridgelist list = (Fridgelist)getApplicationContext();
+        setContentView(R.layout.recipe_search);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        Button star = (Button)findViewById(R.id.shakestar);
+        if(list.shake){
+            star.setBackground(getResources().getDrawable(R.drawable.star, null));
+        }
+        else{
+            star.setBackground(getDrawable(R.drawable.unstar));
+        }
+        Button shake = (Button)findViewById(R.id.shake);
+        shake.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                call_recipe_ingredient();
+            }
+        });
+        Button ice = (Button)findViewById(R.id.ice);
+        ice.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                call_recipe_ingredient();
+            }
+        });
+    }
+
+    public void call_recipe_ingredient(){
+        final Fridgelist list = (Fridgelist)getApplicationContext();
+        setContentView(R.layout.recipe_ingredient);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        Button star = (Button)findViewById(R.id.star);
+        if(list.shake){
+            star.setBackground(getDrawable(R.drawable.bigstar));
+        }
+        else{
+            star.setBackground(getDrawable(R.drawable.bigunstar));
+        }
+        star.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list.change_shake();
+                if(list.shake){
+                    v.setBackground(getDrawable(R.drawable.bigstar));
+                }
+                else{
+                    v.setBackground(getDrawable(R.drawable.bigunstar));
+                }
+            }
+        });
+
+        Button back = (Button)findViewById(R.id.btnback);
+        back.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                call_recipe_search();
+            }
+        });
+
+        ToggleButton toggle = (ToggleButton)findViewById(R.id.switchiands);
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    call_recipe_step();
+                }
+                else{
+                    call_recipe_ingredient();
+                }
+            }
+        });
+    }
+
+    public void call_recipe_step(){
+        final Fridgelist list = (Fridgelist)getApplicationContext();
+        setContentView(R.layout.recipe_step);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        Button back = (Button)findViewById(R.id.btnback);
+        back.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                call_recipe_search();
+            }
+        });
+
+        Button star = (Button)findViewById(R.id.star);
+        if(list.shake){
+            star.setBackground(getDrawable(R.drawable.bigstar));
+        }
+        else{
+            star.setBackground(getDrawable(R.drawable.bigunstar));
+        }
+        star.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list.change_shake();
+                if(list.shake){
+                    v.setBackground(getDrawable(R.drawable.bigstar));
+                }
+                else{
+                    v.setBackground(getDrawable(R.drawable.bigunstar));
+                }
+            }
+        });
+
+        ToggleButton toggle = (ToggleButton)findViewById(R.id.switchiands);
+        toggle.setChecked(true);
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    call_recipe_step();
+                }
+                else{
+                    call_recipe_ingredient();
+                }
             }
         });
     }
