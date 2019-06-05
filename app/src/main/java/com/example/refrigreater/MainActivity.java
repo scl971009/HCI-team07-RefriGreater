@@ -1956,7 +1956,7 @@ public class MainActivity extends Activity {
                     call_main();
                     return true;
                 case R.id.navigation_recipe:
-                    setContentView(R.layout.fridge);
+                    setContentView(R.layout.recipe);
                     BottomNavigationView navigation1 = (BottomNavigationView) findViewById(R.id.navigation);
                     navigation1.setSelectedItemId(R.id.navigation_recipe);
                     navigation1.setOnNavigationItemSelectedListener(this);
