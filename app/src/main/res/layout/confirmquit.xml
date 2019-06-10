@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="690px"
+    android:layout_height="495px"
+    android:background="@drawable/yesquit">
+
+    <Button
+        android:id="@+id/btncancel"
+        android:layout_width="240px"
+        android:layout_height="96px"
+        android:layout_marginTop="240px"
+        android:layout_marginStart="55px"
+        android:background="@drawable/cancel"
+        android:gravity="center"
+        android:src="@drawable/cancel"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnconfirm"
+        android:layout_width="240px"
+        android:layout_height="96px"
+        android:layout_marginTop="240px"
+        android:layout_marginStart="15px"
+        android:background="@drawable/confirm"
+        android:gravity="center"
+        android:src="@drawable/confirm"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>

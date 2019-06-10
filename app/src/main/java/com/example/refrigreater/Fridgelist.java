@@ -37,6 +37,10 @@ public class Fridgelist extends Application {
         fridgelist.add(new Fridge(name, id, user));
     }
 
+    public void delete_fridge(int index){
+        fridgelist.remove(fridgelist.get(index));
+    }
+
     public class Fridge {
         public ArrayList<Food> foodlist = new ArrayList<>();
         public ArrayList<Category> categorylist = new ArrayList<>();

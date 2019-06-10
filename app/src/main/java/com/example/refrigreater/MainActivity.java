@@ -3,6 +3,10 @@ package com.example.refrigreater;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
@@ -49,19 +53,46 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fridgelist list = (Fridgelist) getApplicationContext();
-        list.add_fridge("家", "1234567", "宇智波佐助");
-        list.add_id(list.fridgelist.get(0).id, View.generateViewId());
-        list.fridgelist.get(0).add( "玉米", "預設", 5, false, "", 2019, 5, 2);
-        list.fridgelist.get(0).add("起司", "預設", 1000, true, "", 2022, 1, 21);
-        list.fridgelist.get(0).add( "芒果", "預設", 0, true, "", 2019, 4, 28);
-        list.fridgelist.get(0).addcategory("預設", 1, true);
-        list.fridgelist.get(0).addcategory("更改預設", -1, true);
-        list.fridgelist.get(0).addcategory("新增類別", -1, true);
-        list.fridgelist.get(0).addcategory("刪除類別", -1, true);
-        list.fridgelist.get(0).addMap("全選", View.generateViewId());
-        list.fridgelist.get(0).addMap("預設", View.generateViewId());
-        call_main();
+        if (getIntent().hasExtra("fromNotification")) {
+            call_recipe_search();
+        }
+        else {
+            Fridgelist list = (Fridgelist) getApplicationContext();
+            list.add_fridge("家", "1234567", "宇智波佐助");
+            list.add_id(list.fridgelist.get(0).id, View.generateViewId());
+            list.fridgelist.get(0).add("玉米", "主食", 5, true, "", 2019, 5, 2);
+            list.fridgelist.get(0).add("起司", "蛋奶", 209, true, "", 2022, 1, 21);
+            list.fridgelist.get(0).add("芒果", "水果", 0, true, "", 2019, 4, 28);
+            list.fridgelist.get(0).add("鮮奶", "飲料", 0, false, "", 2019, 6, 13);
+            list.fridgelist.get(0).add("高麗菜", "蔬菜", 3, true, "", 2019, 6, 30);
+            list.fridgelist.get(0).add("橘子", "水果", 4, true, "", 2019, 6, 30);
+            list.fridgelist.get(0).add("雞胸肉", "魚肉", 7, false, "", 2019, 6, 30);
+            list.fridgelist.get(0).add("義大利麵", "主食", 14, true, "", 2019, 6, 30);
+            list.fridgelist.get(0).add("蛋", "蛋奶", 16, true, "", 2019, 6, 30);
+            list.fridgelist.get(0).add("果凍", "其他", 21, false, "", 2019, 6, 30);
+            list.fridgelist.get(0).add("鰻魚", "魚肉", 111, true, "", 2019, 6, 30);
+            list.fridgelist.get(0).addcategory("主食", 1, true);
+            list.fridgelist.get(0).addcategory("水果", 0, true);
+            list.fridgelist.get(0).addcategory("飲料", 0, true);
+            list.fridgelist.get(0).addcategory("蔬菜", 0, true);
+            list.fridgelist.get(0).addcategory("魚肉", 0, true);
+            list.fridgelist.get(0).addcategory("蛋奶", 0, true);
+            list.fridgelist.get(0).addcategory("其他", 0, true);
+            list.fridgelist.get(0).addcategory("更改預設", -1, true);
+            list.fridgelist.get(0).addcategory("新增類別", -1, true);
+            list.fridgelist.get(0).addcategory("刪除類別", -1, true);
+            list.fridgelist.get(0).addMap("全選", View.generateViewId());
+            list.fridgelist.get(0).addMap("主食", View.generateViewId());
+            list.fridgelist.get(0).addMap("水果", View.generateViewId());
+            list.fridgelist.get(0).addMap("飲料", View.generateViewId());
+            list.fridgelist.get(0).addMap("蔬菜", View.generateViewId());
+            list.fridgelist.get(0).addMap("魚肉", View.generateViewId());
+            list.fridgelist.get(0).addMap("蛋奶", View.generateViewId());
+            list.fridgelist.get(0).addMap("其他", View.generateViewId());
+
+
+            call_main();
+        }
     }
 
     public void call_main(){
@@ -243,6 +274,33 @@ public class MainActivity extends Activity {
 
             }
         });
+
+        Button searchbar = (Button)findViewById(R.id.searchbar);
+        searchbar.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                String id = "id";
+                NotificationManager notificationManger;
+                notificationManger = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                Intent notificationIntent = new Intent(MainActivity.this, MainActivity.class);
+                notificationIntent.putExtra("fromNotification", true);
+                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, notificationIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                Notification notification;
+                notification = new Notification.Builder(MainActivity.this)
+                        .setSmallIcon(R.drawable.app_iconnn)
+                        .setContentTitle("到期通知")
+                        .setContentText("芒果快要到期了")
+                        .setContentIntent(pendingIntent)
+                        .build();
+                notification.flags = Notification.FLAG_AUTO_CANCEL;
+                notification.priority = Notification.PRIORITY_HIGH;
+                notification.defaults |= Notification.DEFAULT_SOUND;
+                notificationManger.notify(1, notification);
+                return false;
+            }
+        });
+
         Integer index = 0;
         for(int i = 0; i < list.fridgelist.size(); i++){
             if(list.fridgelist.get(i).name.matches(fridge)) {
@@ -997,10 +1055,33 @@ public class MainActivity extends Activity {
         constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
         constraintLayout.addView(fridge_name);
         applyConstraintSet.clone(constraintLayout);
-        applyConstraintSet.connect(fridge_name.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 279);
+        applyConstraintSet.connect(fridge_name.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 291);
         applyConstraintSet.connect(fridge_name.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 165);
         applyConstraintSet.constrainHeight(fridge_name.getId(), 72);
         applyConstraintSet.constrainWidth(fridge_name.getId(), 270);
+        applyConstraintSet.applyTo(constraintLayout);
+
+        TextView id = new TextView(MainActivity.this);
+        id.setId(View.generateViewId());
+        String id_t = "id";
+        final Fridgelist list = (Fridgelist)getApplication();
+        for(int i = 0; i < list.fridgelist.size(); i++){
+            if(list.fridgelist.get(i).name.matches(fridge)){
+                id_t = list.fridgelist.get(i).id;
+                break;
+            }
+        }
+        String whole = "(ID:"+id_t+")";
+        id.setText(whole);
+        id.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        id.setGravity(Gravity.CENTER);
+        constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+        constraintLayout.addView(id);
+        applyConstraintSet.clone(constraintLayout);
+        applyConstraintSet.connect(id.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 302);
+        applyConstraintSet.connect(id.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 435);
+        applyConstraintSet.constrainHeight(id.getId(), 57);
+        applyConstraintSet.constrainWidth(id.getId(), 255);
         applyConstraintSet.applyTo(constraintLayout);
 
         Button back = (Button)findViewById(R.id.btnback);
@@ -1008,6 +1089,47 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 call_seefood(fridge);
+            }
+        });
+
+        Button quit = (Button)findViewById(R.id.btnquit);
+        quit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                final View v = getLayoutInflater().inflate(R.layout.confirmquit, null);
+
+                Button cancel = (Button) v.findViewById(R.id.cancel);
+                Button confirm = (Button) v.findViewById(R.id.confirm);
+
+                dialog.setView(v);
+                final AlertDialog log = dialog.create();
+
+
+                cancel.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        log.dismiss();
+                    }
+                });
+
+                confirm.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int i = 0;
+                        for(i = 0; i < list.fridgelist.size(); i++){
+                            if(list.fridgelist.get(i).name.matches(fridge))
+                                break;
+                        }
+                        list.delete_fridge(i);
+                    }
+                });
+
+                log.show();
+                WindowManager.LayoutParams params = log.getWindow().getAttributes();
+                params.height = 850;
+                params.width = 850;
+                log.getWindow().setAttributes(params);
             }
         });
     }
@@ -1150,8 +1272,11 @@ public class MainActivity extends Activity {
 
     public void switchfilter(View view){
         LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
-        if(linear.getVisibility() == View.GONE)
+        if(linear.getVisibility() == View.GONE) {
             linear.setVisibility(View.VISIBLE);
+            linear.bringToFront();
+            linear.setTranslationZ(10);
+        }
         else
             linear.setVisibility(View.GONE);
     }
@@ -1250,6 +1375,7 @@ public class MainActivity extends Activity {
 
         LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
         linear.addView(checkBox);
+        checkBox.bringToFront();
     }
 
     public void setCheckBoxAttribute(final CheckBox checkBox, final Fridgelist.Fridge.Category category, final int index, final String fridge){

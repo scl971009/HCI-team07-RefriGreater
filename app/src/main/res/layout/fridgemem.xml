@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".SeeFood"
+    android:id="@+id/container">
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/windowBackground"
+        app:itemBackground="@color/toolbar"
+        app:itemIconTint="@android:color/black"
+        app:itemTextColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
     
     <TextView
         android:id="@+id/title"
@@ -36,9 +51,42 @@
         android:layout_width="72px"
         android:layout_height="72px"
         android:src="@drawable/memfridge"
-        android:layout_marginTop="279px"
+        android:layout_marginTop="291px"
         android:layout_marginStart="87px"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/btnquit"
+        android:layout_width="240px"
+        android:layout_height="96px"
+        android:layout_marginStart="777px"
+        android:layout_marginTop="282px"
+        android:background="@drawable/quit"
+        android:gravity="center"
+        android:src="@drawable/quit"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+    <ImageView
+        android:id="@+id/search"
+        android:layout_width="960px"
+        android:layout_height="108px"
+        android:src="@drawable/memsearch"
+        android:layout_marginStart="60px"
+        android:layout_marginTop="403px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+    
+    <ImageView
+        android:id="@+id/bg"
+        android:layout_width="960px"
+        android:layout_height="1077px"
+        android:src="@drawable/memberbg"
+        android:layout_marginStart="60px"
+        android:layout_marginTop="520px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
