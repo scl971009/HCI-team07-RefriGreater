@@ -1047,6 +1047,8 @@ public class MainActivity extends Activity {
         Spinner spinner = findViewById(R.id.spinner);
         final String fridge = spinner.getSelectedItem().toString();
         setContentView(R.layout.fridgemem);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         TextView fridge_name = new TextView(MainActivity.this);
         fridge_name.setId(View.generateViewId());
         fridge_name.setText(fridge);
@@ -1099,8 +1101,10 @@ public class MainActivity extends Activity {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
                 final View v = getLayoutInflater().inflate(R.layout.confirmquit, null);
 
-                Button cancel = (Button) v.findViewById(R.id.cancel);
-                Button confirm = (Button) v.findViewById(R.id.confirm);
+                Button cancel = (Button) v.findViewById(R.id.btncancel);
+                Button confirm = (Button) v.findViewById(R.id.btnconfirm);
+                TextView text = (TextView)v.findViewById(R.id.quitwhat);
+                text.setText(fridge+"?");
 
                 dialog.setView(v);
                 final AlertDialog log = dialog.create();
@@ -1122,13 +1126,15 @@ public class MainActivity extends Activity {
                                 break;
                         }
                         list.delete_fridge(i);
+                        log.dismiss();
+                        call_main();
                     }
                 });
 
                 log.show();
                 WindowManager.LayoutParams params = log.getWindow().getAttributes();
-                params.height = 850;
-                params.width = 850;
+                params.height = 595;
+                params.width = 790;
                 log.getWindow().setAttributes(params);
             }
         });
@@ -1607,7 +1613,7 @@ public class MainActivity extends Activity {
                         list.fridgelist.get(list.fridgelist.size() - 1).addcategory("刪除類別", -1, true);
                         list.fridgelist.get(list.fridgelist.size() - 1).addMap("全選", View.generateViewId());
                         list.fridgelist.get(list.fridgelist.size() - 1).addMap("預設", View.generateViewId());
-                        list.fridgelist.get(list.fridgelist.size() - 1).add("星爆氣流斬", "預設", 87, true, "", 2019, 7, 23);
+                        list.fridgelist.get(list.fridgelist.size() - 1).add("兔肉", "預設", 87, true, "", 2019, 7, 23);
                         log.dismiss();
                         call_main();
                     }
