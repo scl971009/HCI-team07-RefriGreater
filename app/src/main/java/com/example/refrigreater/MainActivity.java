@@ -420,6 +420,10 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void into_recipe(View view){
+        call_recipe_ingredient();
+    }
+
     private void setBtnAttribute(Button codeBtn, Fridgelist.Fridge.Food list, int index, int hash, final String fridge) {
         codeBtn.setId(View.generateViewId());
         if(list.nother) {

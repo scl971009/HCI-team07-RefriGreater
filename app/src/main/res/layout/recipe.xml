@@ -7,14 +7,15 @@
     android:layout_x="160dp"
     tools:context=".SeeFood">
 
-    <ImageView
+    <Button
         android:layout_width="972px"
         android:layout_height="1653px"
-        android:src="@drawable/recipe_kari"
+        android:background="@drawable/recipe_kari"
         android:layout_marginTop="63px"
         android:layout_marginStart="54px"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="into_recipe"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
