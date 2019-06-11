@@ -22,4 +22,13 @@
         app:itemIconTint="@android:color/black"
         app:menu="@menu/navigation" />
 
+    <ImageView
+        android:layout_width="960px"
+        android:layout_height="1347px"
+        android:src="@drawable/setting"
+        android:layout_marginStart="60px"
+        android:layout_marginTop="117px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 </android.support.constraint.ConstraintLayout>
