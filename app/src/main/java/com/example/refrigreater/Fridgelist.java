@@ -55,15 +55,15 @@ public class Fridgelist extends Application {
             this.user = user;
         }
 
-        public void add(String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
-            foodlist.add(new Food(name, category, expire, pri0pub1, ps, year, month, day));
+        public void add(String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day, boolean nother) {
+            foodlist.add(new Food(name, category, expire, pri0pub1, ps, year, month, day, nother));
         }
 
         public void delete(int i) {
             foodlist.remove(foodlist.get(i));
         }
 
-        public void change(int index, String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
+        public void change(int index, String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day, boolean nother) {
             foodlist.get(index).name = name;
             foodlist.get(index).category = category;
             foodlist.get(index).expire = expire;
@@ -72,6 +72,7 @@ public class Fridgelist extends Application {
             foodlist.get(index).year = year;
             foodlist.get(index).month = month;
             foodlist.get(index).day = day;
+            foodlist.get(index).nother = nother;
         }
 
         public class Food {
@@ -83,8 +84,9 @@ public class Fridgelist extends Application {
             public int year;
             public int month;
             public int day;
+            public boolean nother;
 
-            public Food(String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day) {
+            public Food(String name, String category, int expire, boolean pri0pub1, String ps, int year, int month, int day, boolean nother) {
                 this.name = name;
                 this.category = category;
                 this.expire = expire;
@@ -93,6 +95,7 @@ public class Fridgelist extends Application {
                 this.year = year;
                 this.month = month;
                 this.day = day;
+                this.nother = nother;
             }
         }
 

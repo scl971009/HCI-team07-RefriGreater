@@ -60,17 +60,19 @@ public class MainActivity extends Activity {
             Fridgelist list = (Fridgelist) getApplicationContext();
             list.add_fridge("家", "1234567", "宇智波佐助");
             list.add_id(list.fridgelist.get(0).id, View.generateViewId());
-            list.fridgelist.get(0).add("玉米", "主食", 5, true, "", 2019, 5, 17);
-            list.fridgelist.get(0).add("起司", "蛋奶", 209, true, "", 2020, 0, 7);
-            list.fridgelist.get(0).add("芒果", "水果", 0, true, "", 2019, 5, 12);
-            list.fridgelist.get(0).add("鮮奶", "飲料", 0, false, "", 2019, 5, 12);
-            list.fridgelist.get(0).add("高麗菜", "蔬菜", 3, true, "", 2019, 5, 15);
-            list.fridgelist.get(0).add("橘子", "水果", 4, true, "", 2019, 5, 16);
-            list.fridgelist.get(0).add("雞胸肉", "魚肉", 7, false, "", 2019, 5, 19);
-            list.fridgelist.get(0).add("義大利麵", "主食", 14, true, "", 2019, 5, 26);
-            list.fridgelist.get(0).add("蛋", "蛋奶", 16, true, "", 2019, 5, 28);
-            list.fridgelist.get(0).add("果凍", "其他", 21, false, "", 2019, 6, 3);
-            list.fridgelist.get(0).add("鰻魚", "魚肉", 111, true, "", 2019, 9, 1);
+            list.fridgelist.get(0).add("玉米", "主食", 5, true, "", 2019, 5, 17, true);
+            list.fridgelist.get(0).add("起司", "蛋奶", 209, true, "", 2020, 0, 7, true);
+            list.fridgelist.get(0).add("芒果", "水果", 0, true, "", 2019, 5, 12, true);
+            list.fridgelist.get(0).add("鮮奶", "飲料", 0, false, "", 2019, 5, 12, true);
+            list.fridgelist.get(0).add("高麗菜", "蔬菜", 3, true, "", 2019, 5, 15, true);
+            list.fridgelist.get(0).add("橘子", "水果", 4, true, "", 2019, 5, 16, true);
+            list.fridgelist.get(0).add("雞胸肉", "魚肉", 7, false, "", 2019, 5, 19, true);
+            list.fridgelist.get(0).add("義大利麵", "主食", 14, true, "", 2019, 5, 26, true);
+            list.fridgelist.get(0).add("蛋", "蛋奶", 16, true, "", 2019, 5, 28, true);
+            list.fridgelist.get(0).add("果凍", "其他", 21, false, "", 2019, 6, 3, true);
+            list.fridgelist.get(0).add("鰻魚", "魚肉", 111, true, "", 2019, 9, 1, true);
+            list.fridgelist.get(0).add("叉燒肉", "魚肉", 13, true, "", 2019, 5, 25, false);
+            list.fridgelist.get(0).add("溏心蛋", "蛋奶", 3, true, "", 2019, 5, 15, false);
             list.fridgelist.get(0).addcategory("主食", 1, true);
             list.fridgelist.get(0).addcategory("水果", 0, true);
             list.fridgelist.get(0).addcategory("飲料", 0, true);
@@ -404,18 +406,33 @@ public class MainActivity extends Activity {
         // Used for sorting in ascending order of
         // roll number
         public int compare(Fridgelist.Fridge.Food a, Fridgelist.Fridge.Food b) {
-            return a.expire - b.expire;
+            if(a.nother == b.nother) {
+                return a.expire - b.expire;
+            }
+            else{
+                if(!a.nother){
+                    return 1;
+                }
+                else{
+                    return -1;
+                }
+            }
         }
     }
 
     private void setBtnAttribute(Button codeBtn, Fridgelist.Fridge.Food list, int index, int hash, final String fridge) {
         codeBtn.setId(View.generateViewId());
-        if (list.expire < 3) {
-            codeBtn.setBackground(getResources().getDrawable(R.drawable.backred, null));
-        } else if (list.expire > 5) {
-            codeBtn.setBackground(getResources().getDrawable(R.drawable.backgreen, null));
-        } else {
-            codeBtn.setBackground(getResources().getDrawable(R.drawable.backyellow, null));
+        if(list.nother) {
+            if (list.expire < 3) {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.backred, null));
+            } else if (list.expire > 5) {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.backgreen, null));
+            } else {
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.backyellow, null));
+            }
+        }
+        else{
+            codeBtn.setBackground(getResources().getDrawable(R.drawable.backblack, null));
         }
         String text = list.name;
         for (int i = 0; i < 5 - list.name.length(); i++) {
@@ -457,59 +474,60 @@ public class MainActivity extends Activity {
         codeBtn.setTag(hash);
         codeBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
         codeBtn.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+
         if (!list.pri0pub1) {
             codeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.privateicon, 0, 0, 0);
             codeBtn.setPadding(36, 0, 0, 0);
             codeBtn.setCompoundDrawablePadding(27);
-        }
-        else{
+        } else {
             codeBtn.setPadding(159, 0, 0, 0);
         }
+        if(list.nother) {
+            codeBtn.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Integer index = 0;
+                    if (v instanceof Button) {
+                        if (((Button) v).getTag() instanceof Integer) {
+                            index = Integer.parseInt(((Button) v).getTag().toString());
+                        }
+                        final Integer temp = index;
+                        setContentView(R.layout.activity_see_food);
+                        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                        Button backBtn = (Button) findViewById(R.id.btnback);
+                        backBtn.setOnClickListener(backwardbtnlistener);
+                        Button plusBtn = (Button) findViewById(R.id.btnplus);
+                        plusBtn.setOnClickListener(plusfoodbtnlistener);
+                        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                        setCenterSpinner(spinner);
+                        addsetCenterSpinnerleftup(spinner, fridge);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                //Toast.makeText(MainActivity.this, "您選擇"+parent.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                                LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
+                                ll.removeAllViews();
+                                regenerateBtnList(temp, parent.getSelectedItem().toString());
+                                LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+                                linear.removeAllViews();
+                                generateCheckboxList(parent.getSelectedItem().toString());
+                                //call_seefood(parent.getSelectedItem().toString());
+                            }
 
-        codeBtn.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Integer index = 0;
-                if(v instanceof Button) {
-                    if (((Button) v).getTag() instanceof Integer) {
-                        index = Integer.parseInt(((Button) v).getTag().toString());
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                        regenerateBtnList(index, fridge);
+                        generateCheckboxList(fridge);
+                        plusBtn.bringToFront();
                     }
-                    final Integer temp = index;
-                    setContentView(R.layout.activity_see_food);
-                    BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                    Button backBtn = (Button) findViewById(R.id.btnback);
-                    backBtn.setOnClickListener(backwardbtnlistener);
-                    Button plusBtn = (Button) findViewById(R.id.btnplus);
-                    plusBtn.setOnClickListener(plusfoodbtnlistener);
-                    Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                    setCenterSpinner(spinner);
-                    addsetCenterSpinnerleftup(spinner, fridge);
-                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            //Toast.makeText(MainActivity.this, "您選擇"+parent.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
-                            LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
-                            ll.removeAllViews();
-                            regenerateBtnList(temp, parent.getSelectedItem().toString());
-                            LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
-                            linear.removeAllViews();
-                            generateCheckboxList(parent.getSelectedItem().toString());
-                            //call_seefood(parent.getSelectedItem().toString());
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-                    regenerateBtnList(index, fridge);
-                    generateCheckboxList(fridge);
-                    plusBtn.bringToFront();
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
         //constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
         LinearLayout linear = (LinearLayout) findViewById(R.id.mylinear);
         LinearLayout contain = new LinearLayout(MainActivity.this);
@@ -564,12 +582,17 @@ public class MainActivity extends Activity {
     private void resetBtnAttribute(Button codeBtn, Fridgelist.Fridge.Food list, int index, int hash, final int special, final String fridge) {
         if(hash != special) {
             codeBtn.setId(View.generateViewId());
-            if (list.expire < 3) {
-                codeBtn.setBackground(getResources().getDrawable(R.drawable.backred, null));
-            } else if (list.expire > 5) {
-                codeBtn.setBackground(getResources().getDrawable(R.drawable.backgreen, null));
-            } else {
-                codeBtn.setBackground(getResources().getDrawable(R.drawable.backyellow, null));
+            if(list.nother) {
+                if (list.expire < 3) {
+                    codeBtn.setBackground(getResources().getDrawable(R.drawable.backred, null));
+                } else if (list.expire > 5) {
+                    codeBtn.setBackground(getResources().getDrawable(R.drawable.backgreen, null));
+                } else {
+                    codeBtn.setBackground(getResources().getDrawable(R.drawable.backyellow, null));
+                }
+            }
+            else{
+                codeBtn.setBackground(getResources().getDrawable(R.drawable.backblack, null));
             }
             String text = list.name;
             for (int i = 0; i < 5 - list.name.length(); i++) {
@@ -619,50 +642,52 @@ public class MainActivity extends Activity {
                 codeBtn.setPadding(159, 0, 0, 0);
             }
 
-            codeBtn.setOnLongClickListener(new OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Integer index = 0;
-                    if (v instanceof Button) {
-                        if (((Button) v).getTag() instanceof Integer) {
-                            index = Integer.parseInt(((Button) v).getTag().toString());
+            if(list.nother) {
+                codeBtn.setOnLongClickListener(new OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Integer index = 0;
+                        if (v instanceof Button) {
+                            if (((Button) v).getTag() instanceof Integer) {
+                                index = Integer.parseInt(((Button) v).getTag().toString());
+                            }
+                            final Integer temp = index;
+                            setContentView(R.layout.activity_see_food);
+                            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+                            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                            Button backBtn = (Button) findViewById(R.id.btnback);
+                            backBtn.setOnClickListener(backwardbtnlistener);
+                            Button plusBtn = (Button) findViewById(R.id.btnplus);
+                            plusBtn.setOnClickListener(plusfoodbtnlistener);
+                            Spinner spinner = (Spinner) findViewById(R.id.spinner);
+                            setCenterSpinner(spinner);
+                            addsetCenterSpinnerleftup(spinner, fridge);
+                            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    //Toast.makeText(MainActivity.this, "您選擇"+parent.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                                    LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
+                                    ll.removeAllViews();
+                                    regenerateBtnList(temp, parent.getSelectedItem().toString());
+                                    LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
+                                    linear.removeAllViews();
+                                    generateCheckboxList(parent.getSelectedItem().toString());
+                                    //call_seefood(parent.getSelectedItem().toString());
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+                            regenerateBtnList(index, fridge);
+                            generateCheckboxList(fridge);
+                            plusBtn.bringToFront();
                         }
-                        final Integer temp = index;
-                        setContentView(R.layout.activity_see_food);
-                        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-                        Button backBtn = (Button) findViewById(R.id.btnback);
-                        backBtn.setOnClickListener(backwardbtnlistener);
-                        Button plusBtn = (Button) findViewById(R.id.btnplus);
-                        plusBtn.setOnClickListener(plusfoodbtnlistener);
-                        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-                        setCenterSpinner(spinner);
-                        addsetCenterSpinnerleftup(spinner, fridge);
-                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                //Toast.makeText(MainActivity.this, "您選擇"+parent.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
-                                LinearLayout ll = (LinearLayout) findViewById(R.id.mylinear);
-                                ll.removeAllViews();
-                                regenerateBtnList(temp, parent.getSelectedItem().toString());
-                                LinearLayout linear = (LinearLayout) findViewById(R.id.filter);
-                                linear.removeAllViews();
-                                generateCheckboxList(parent.getSelectedItem().toString());
-                                //call_seefood(parent.getSelectedItem().toString());
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                        regenerateBtnList(index, fridge);
-                        generateCheckboxList(fridge);
-                        plusBtn.bringToFront();
+                        return true;
                     }
-                    return true;
-                }
-            });
+                });
+            }
             //constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
             LinearLayout linear = (LinearLayout) findViewById(R.id.mylinear);
             LinearLayout contain = new LinearLayout(MainActivity.this);
@@ -974,7 +999,7 @@ public class MainActivity extends Activity {
                                 }
                                 if (spinnerf.getSelectedItem().toString().matches(fridge)) {
                                     list.fridgelist.get(temp).change(indexinside, editText.getText().toString(),
-                                            spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd);
+                                            spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd, true);
                                 }
                                 else{
                                     list.fridgelist.get(temp).delete(indexinside);
@@ -985,7 +1010,7 @@ public class MainActivity extends Activity {
                                         }
                                     }
                                     list.fridgelist.get(temp).add(editText.getText().toString(),
-                                            spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd);
+                                            spinnerc.getSelectedItem().toString(), (int) days, toggle.isChecked(), ps.getText().toString(), yy, mm - 1, dd, true);
                                 }
                                 log.dismiss();
                                 call_seefood(fridge);
@@ -1681,7 +1706,7 @@ public class MainActivity extends Activity {
                         list.fridgelist.get(list.fridgelist.size() - 1).addcategory("刪除類別", -1, true);
                         list.fridgelist.get(list.fridgelist.size() - 1).addMap("全選", View.generateViewId());
                         list.fridgelist.get(list.fridgelist.size() - 1).addMap("預設", View.generateViewId());
-                        list.fridgelist.get(list.fridgelist.size() - 1).add("兔肉", "預設", 87, true, "", 2019, 8, 7);
+                        list.fridgelist.get(list.fridgelist.size() - 1).add("兔肉", "預設", 87, true, "", 2019, 8, 7, true);
                         log.dismiss();
                         call_main();
                     }
@@ -2018,7 +2043,7 @@ public class MainActivity extends Activity {
                             e.printStackTrace();
                         }
                         list.fridgelist.get(temp).add(editText.getText().toString(),
-                                spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString(), yy, mm-1, dd);
+                                spinnerc.getSelectedItem().toString(), (int)days, toggle.isChecked(), ps.getText().toString(), yy, mm-1, dd, true);
                         log.dismiss();
                         call_seefood(spinnerf.getSelectedItem().toString());
                     }
