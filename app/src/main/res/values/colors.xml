@@ -6,4 +6,5 @@
     <color name="toolbar">#F1F9FF</color>
     <color name="choosefridge">#2699FB</color>
     <color name="datepicker">#2699FB</color>
+    <color name="mem">#757575</color>
 </resources>

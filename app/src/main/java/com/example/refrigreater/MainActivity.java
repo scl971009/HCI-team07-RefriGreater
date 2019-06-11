@@ -142,6 +142,17 @@ public class MainActivity extends Activity {
         applyConstraintSet.applyTo(constraintLayout);
     }
 
+    public void mainsetsumei(View view){
+        ImageView setsumei = (ImageView)findViewById(R.id.setsumei);
+        ToggleButton togglebutton = (ToggleButton)findViewById(R.id.mainq);
+        if(togglebutton.isChecked()){
+            setsumei.setVisibility((View.VISIBLE));
+        }
+        else{
+            setsumei.setVisibility(View.GONE);
+        }
+    }
+
     public void onTargetClick(View view) {
         Fridgelist list = (Fridgelist)getApplicationContext();
         switch(list.fridgelist.size()){
@@ -1066,10 +1077,12 @@ public class MainActivity extends Activity {
         TextView id = new TextView(MainActivity.this);
         id.setId(View.generateViewId());
         String id_t = "id";
+        String username = "";
         final Fridgelist list = (Fridgelist)getApplication();
         for(int i = 0; i < list.fridgelist.size(); i++){
             if(list.fridgelist.get(i).name.matches(fridge)){
                 id_t = list.fridgelist.get(i).id;
+                username = list.fridgelist.get(i).user;
                 break;
             }
         }
@@ -1084,6 +1097,61 @@ public class MainActivity extends Activity {
         applyConstraintSet.connect(id.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 435);
         applyConstraintSet.constrainHeight(id.getId(), 57);
         applyConstraintSet.constrainWidth(id.getId(), 255);
+        applyConstraintSet.applyTo(constraintLayout);
+
+        if(id_t.matches("1234567")){
+            ImageView homemember = new ImageView(MainActivity.this);
+            homemember.setId(View.generateViewId());
+            homemember.setBackground(getResources().getDrawable(R.drawable.homemem, null));
+            constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+            constraintLayout.addView(homemember);
+            applyConstraintSet.clone(constraintLayout);
+            applyConstraintSet.connect(homemember.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 535);
+            applyConstraintSet.connect(homemember.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 84);
+            applyConstraintSet.constrainHeight(homemember.getId(), 819);
+            applyConstraintSet.constrainWidth(homemember.getId(), 885);
+            applyConstraintSet.applyTo(constraintLayout);
+        }
+        else if(id_t.matches("c876387")){
+            ImageView sao = new ImageView(MainActivity.this);
+            sao.setId(View.generateViewId());
+            sao.setBackground(getResources().getDrawable(R.drawable.sao, null));
+            constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+            constraintLayout.addView(sao);
+            applyConstraintSet.clone(constraintLayout);
+            applyConstraintSet.connect(sao.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 535);
+            applyConstraintSet.connect(sao.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 84);
+            applyConstraintSet.constrainHeight(sao.getId(), 423);
+            applyConstraintSet.constrainWidth(sao.getId(), 885);
+            applyConstraintSet.applyTo(constraintLayout);
+        }
+        else{
+            ImageView newf = new ImageView(MainActivity.this);
+            newf.setId(View.generateViewId());
+            newf.setBackground(getResources().getDrawable(R.drawable.newfridgemem, null));
+            constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+            constraintLayout.addView(newf);
+            applyConstraintSet.clone(constraintLayout);
+            applyConstraintSet.connect(newf.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 535);
+            applyConstraintSet.connect(newf.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 84);
+            applyConstraintSet.constrainHeight(newf.getId(), 225);
+            applyConstraintSet.constrainWidth(newf.getId(), 885);
+            applyConstraintSet.applyTo(constraintLayout);
+        }
+
+        TextView user = new TextView(MainActivity.this);
+        user.setId(View.generateViewId());
+        user.setText(username);
+        user.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        user.setGravity(Gravity.START);
+        user.setTextColor(getResources().getColor(R.color.mem, null));
+        constraintLayout = (android.support.constraint.ConstraintLayout) findViewById(R.id.container);
+        constraintLayout.addView(user);
+        applyConstraintSet.clone(constraintLayout);
+        applyConstraintSet.connect(user.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 649);
+        applyConstraintSet.connect(user.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT, 294);
+        applyConstraintSet.constrainHeight(user.getId(), 75);
+        applyConstraintSet.constrainWidth(user.getId(), 270);
         applyConstraintSet.applyTo(constraintLayout);
 
         Button back = (Button)findViewById(R.id.btnback);
@@ -1613,7 +1681,7 @@ public class MainActivity extends Activity {
                         list.fridgelist.get(list.fridgelist.size() - 1).addcategory("刪除類別", -1, true);
                         list.fridgelist.get(list.fridgelist.size() - 1).addMap("全選", View.generateViewId());
                         list.fridgelist.get(list.fridgelist.size() - 1).addMap("預設", View.generateViewId());
-                        list.fridgelist.get(list.fridgelist.size() - 1).add("兔肉", "預設", 87, true, "", 2019, 7, 23);
+                        list.fridgelist.get(list.fridgelist.size() - 1).add("兔肉", "預設", 87, true, "", 2019, 8, 7);
                         log.dismiss();
                         call_main();
                     }

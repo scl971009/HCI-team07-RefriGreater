@@ -82,5 +82,29 @@
         android:onClick="onTargetClick"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    
+    <ToggleButton
+        android:id="@+id/mainq"
+        android:textOff=""
+        android:textOn=""
+        android:layout_width="54px"
+        android:layout_height="54px"
+        android:layout_marginStart="585px"
+        android:layout_marginTop="390px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/mainquest"
+        android:onClick="mainsetsumei"/>
+    
+    <ImageView
+        android:id="@+id/setsumei"
+        android:layout_width="882px"
+        android:layout_height="180px"
+        android:src="@drawable/mainsetsumei"
+        android:layout_marginTop="453px"
+        android:layout_marginStart="99px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>
